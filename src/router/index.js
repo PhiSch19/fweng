@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
+import ImprintPage from '../pages/ImprintPage.vue'
+import HelpPage from '../pages/HelpPage.vue'
 
 const routes = [
   {
@@ -7,6 +9,17 @@ const routes = [
     name: 'home',
     component: HomePage
   },
+  {
+    path: '/help',
+    name: 'help',
+    component: HelpPage
+  },
+  {
+    path: '/imprint',
+    name: 'imprint',
+    component: ImprintPage
+  },
+  
   {
     path: '/about',
     name: 'about',

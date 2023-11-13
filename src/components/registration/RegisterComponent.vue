@@ -1,29 +1,87 @@
 <template>
     <div class="modal">
         <h1>Register</h1>
-        <form>
+        <div>
             <label for="firstName">First Name: </label>
-            <input id="firstName" type="text"/>
+            <input id="firstName" type="text"
+                :value="firstName"
+                @input="event => firstName = event.target.value"
+                />
             <label for="lastName">Last Name: </label>
-            <input id="lastName" type="text"/>
+            <input id="lastName" type="text"
+                :value="lastName"
+                @input="event => lastName = event.target.value"
+            />
             <label for="email" type="email">Email: </label>
-            <input id="email" type="text" />
+            <input id="email" type="text"
+                :value="email"
+                @input="event => email = event.target.value"
+            />
             <label for="dob">Age: </label>
-            <input id="dob" type="date" />
+            <input id="dob" type="date" 
+                :value="dob"
+                @input="event => dob = event.target.value"
+            />
             <label for="password">Password: </label>
-            <input id="password" type="password" />
-            <button type="submit">register</button>
-        </form>
+            <input id="password" type="password" 
+            :value="password"
+            @input="event => password = event.target.value"
+            />
+            <button type="submit" @click="handleRegister()">register</button>
+        </div>
     </div>
 </template>
+
+<script setup>
+    import {ref, inject} from "vue";
+    const errorHandler = inject("errors");
+
+    const firstName = ref("");
+    const lastName = ref("");
+    const email = ref("");
+    const dob = ref("")
+    const password = ref("");
+
+    const handleRegister = async () => {
+        const body = {firstName: firstName.value,
+                      lastName: lastName.value,
+                      email: email.value,
+                      dob: dob.value,
+                      password: password.value
+                    }
+        try{
+            const token = await register(body);
+        }catch(e){
+            errorHandler(e);
+        }
+
+
+
+    }
+
+    const register = async (body) => {
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {"content-type": "application/json",},
+            body: JSON.stringify(body)
+        })
+        if (response.status !== 200){
+            throw new Error("Could not register this user. Please try again");
+            }
+
+        return await response.json();
+
+
+
+    }
+</script>
 
 <script>
 export default {
     name: "RegisterComponent"
 }
-
-
 </script>
+
 <style scoped>
     .modal {
     position: absolute;

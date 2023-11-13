@@ -6,22 +6,42 @@
     const registerShowState = ref(false);
     const loginShowState = ref(false);
     const errorMessage = ref("");
-    provide ("errorMessage", errorMessage);
+    const currentError = ref(false)
+    //error Handler
+    const errorHandler = async(e) => {
+
+        errorMessage.value = e;
+        currentError.value = true;
+        setTimeout(() => {currentError.value = false;
+                          errorMessage.value = "";
+                  }, 3000);
+
+    }
+    provide("errors",  errorHandler);
+    
 
     // event handlers
     const registerBtnClickHandler = () => {
         console.log("Event: plusBtn was clicked")
         if(registerShowState.value){
             registerShowState.value = false;
-        } else registerShowState.value = true;
+        } else {
+            loginShowState.value = false;
+            registerShowState.value = true;
+        }
     }
 
     const loginBtnClickHandler = () => {
         console.log("Event: plusBtn was clicked")
         if(loginShowState.value){
             loginShowState.value = false;
-        } else loginShowState.value = true;
+        } else{
+            loginShowState.value = true;
+            registerShowState.value = false;
+        }
     }
+
+    
 
 
 </script>
@@ -30,12 +50,14 @@
     <nav>
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
-        <button @click="registerBtnClickHandler()">register</button>
+        <router-link to="/help">Help</router-link> |
+        <router-link to="/imprint">Imprint</router-link> |
+        <button @click="registerBtnClickHandler()">register</button> |
         <button @click="loginBtnClickHandler()">login</button>
     </nav>
     <RegisterComponent v-if="registerShowState" class="modal"/>
     <LoginComponent v-if="loginShowState" class="modal" />
-    <ErrorModal errorMessage={{errorMessage}} />
+    <ErrorModal v-if="currentError" :errorMessage="errorMessage" />
 </template>
 
 <script>

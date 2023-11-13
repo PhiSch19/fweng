@@ -19,16 +19,17 @@
 <script setup>
     import {ref, inject} from "vue";
 
-    const errorMessage = inject("errorMessage");
+    const errorHandler = inject("errors");
+
     const email = ref("");
     const password = ref("");
     async function handleLoginBtnClick(){
-        alert(`email: ${email.value}, password: ${password.value}`);
+        //alert(`email: ${email.value}, password: ${password.value}`);
         const body = {username: email, password: password};
         try {
             const token_response = await issueToken(body);
         }catch(e){
-            errorMessage.value = e;
+            await errorHandler(e);
             
         }
         

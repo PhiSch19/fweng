@@ -22,3 +22,24 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Milestone 1 Checklist
+
+### pages
+[x] Home Page
+[x] Imprint Page
+[x] Help Page
+
+### forms
+[x] register
+[x] login
+
+### components
+[x] NavigationBar
+[x] ErrorModal
+
+### Styling Decision
+[ ] Bootstrap vs. Tailwind
+
+### Dummy Data
+[ ] display dummy data 
