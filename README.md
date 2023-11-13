@@ -26,20 +26,20 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## Milestone 1 Checklist
 
 ### pages
-[x] Home Page
-[x] Imprint Page
-[x] Help Page
+- [x] Home Page
+- [x] Imprint Page
+- [x] Help Page
 
 ### forms
-[x] register
-[x] login
+- [x] register
+- [x] login
 
 ### components
-[x] NavigationBar
-[x] ErrorModal
+- [x] NavigationBar
+- [x] ErrorModal
 
 ### Styling Decision
-[ ] Bootstrap vs. Tailwind
+- [ ] Bootstrap vs. Tailwind
 
 ### Dummy Data
-[ ] display dummy data 
+- [ ] display dummy data 
