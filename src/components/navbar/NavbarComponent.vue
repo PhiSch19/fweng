@@ -48,13 +48,15 @@
 
 <template>
     <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/help">Help</router-link> |
-        <router-link to="/imprint">Imprint</router-link> |
-        <button @click="registerBtnClickHandler()">register</button> |
-        <button @click="loginBtnClickHandler()">login</button>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/help">Help</router-link> |
+      <router-link to="/imprint">Imprint</router-link>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="btn-blue" @click="registerBtnClickHandler()">register</button> |
+      <button @click="loginBtnClickHandler()">login</button>
     </nav>
+
     <RegisterComponent v-if="registerShowState" class="modal"/>
     <LoginComponent v-if="loginShowState" class="modal" />
     <ErrorModal v-if="currentError" :errorMessage="errorMessage" />

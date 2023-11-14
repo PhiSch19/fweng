@@ -7,26 +7,31 @@
                 :value="firstName"
                 @input="event => firstName = event.target.value"
                 />
+          <br>
             <label for="lastName">Last Name: </label>
             <input id="lastName" type="text"
                 :value="lastName"
                 @input="event => lastName = event.target.value"
             />
-            <label for="email" type="email">Email: </label>
+          <br>
+          <label for="email" type="email">Email: </label>
             <input id="email" type="text"
                 :value="email"
                 @input="event => email = event.target.value"
             />
+          <br>
             <label for="dob">Age: </label>
             <input id="dob" type="date" 
                 :value="dob"
                 @input="event => dob = event.target.value"
             />
+          <br>
             <label for="password">Password: </label>
             <input id="password" type="password" 
             :value="password"
             @input="event => password = event.target.value"
             />
+          <br>
             <button type="submit" @click="handleRegister()">register</button>
         </div>
     </div>
@@ -91,6 +96,8 @@ export default {
     width: 80%;
     border: black solid 2px;
     border-radius: 5px;
+      background-color: white;
+
     }
     
 </style>

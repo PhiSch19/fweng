@@ -6,12 +6,14 @@
                 :value="email"
                 @input="event => email = event.target.value"
             />
+      <br>
             
             <label for="password">Password: </label>
             <input id="password" type="password"
                 :value="password"
                 @input="event => password = event.target.value"
             />
+      <br>
             <button type="submit" @click="handleLoginBtnClick()">login</button>
     </div>
 </template>
