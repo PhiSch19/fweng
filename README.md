@@ -39,7 +39,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] ErrorModal
 
 ### Styling Decision
-- [ ] Bootstrap vs. Tailwind
+- [X] Bootstrap vs. Tailwind
 
 ### Dummy Data
-- [ ] display dummy data 
+- [X] display dummy data 
+
+### List of Resources:
+- movies: ["GET", "POST", "PUT", "PATCH"]
+- rooms: ["GET", "POST", "PUT", "PATCH"]
+- shows: ["GET", "POST", "PUT", "PATCH"]
