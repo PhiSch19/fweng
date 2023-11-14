@@ -1,5 +1,5 @@
 <template>
-  <NavbarComponent />
+  <NavbarComponent/>
   <h1>HomePage</h1>
   <div>
     <h2>Why Choose Cinemagic?</h2>
@@ -14,7 +14,8 @@
 
   <div>
     <h2>What Sets Us Apart?</h2>
-    <p>At Cinemagic, we believe in creating more than just a movie-watching experience; we strive to craft unforgettable moments.</p>
+    <p>At Cinemagic, we believe in creating more than just a movie-watching experience; we strive to craft unforgettable
+      moments.</p>
   </div>
 
   <div>
@@ -31,6 +32,7 @@
 
 <script>
 import NavbarComponent from "../components/navbar/NavbarComponent.vue";
+
 export default {
   name: 'HomePage',
   components: {

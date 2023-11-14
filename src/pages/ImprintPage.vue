@@ -1,6 +1,6 @@
 <template>
-    <NavbarComponent />
-    <h1>Imprint Page</h1>
+  <NavbarComponent/>
+  <h1>Imprint Page</h1>
   <section>
     <h2>Information According to § 5 TMG:</h2>
     <p>Cinemagic Cinema Booking Service</p>
@@ -22,20 +22,24 @@
 
   <section>
     <h2>Disclaimer:</h2>
-    <p>Content on this website has been created with the utmost care. However, we cannot guarantee the accuracy, completeness, or timeliness of the information provided.</p>
-    <p>As a service provider, we are responsible for our own content on these pages according to general laws. We are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.</p>
+    <p>Content on this website has been created with the utmost care. However, we cannot guarantee the accuracy,
+      completeness, or timeliness of the information provided.</p>
+    <p>As a service provider, we are responsible for our own content on these pages according to general laws. We are
+      not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate
+      illegal activity.</p>
     <p>For any queries or concerns, please contact us via the provided contact information.</p>
   </section>
-  </template>
-  
-  <script>
-  import NavbarComponent from "../components/navbar/NavbarComponent.vue";
-  export default {
-    name: 'ImprintPage',
-    components: {
-      NavbarComponent
-  
-    }
+</template>
+
+<script>
+import NavbarComponent from "../components/navbar/NavbarComponent.vue";
+
+export default {
+  name: 'ImprintPage',
+  components: {
+    NavbarComponent
+
   }
-  </script>
+}
+</script>
   
