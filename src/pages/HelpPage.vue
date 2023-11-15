@@ -24,7 +24,7 @@ export default {
       faqItems: [
         {
           question: 'How do I book tickets?',
-          answer: 'Come to us.',
+          answer: 'Visit us locally at the store.',
         },
         {
           question: 'Can I cancel or change my booking?',
@@ -33,7 +33,12 @@ export default {
         {
           question: 'What payment methods do you accept?',
           answer: 'Cash only.',
-        },],
+        },
+        {
+          question: 'Do you show movies in OV?',
+          answer: 'Yes, only OV movies are shown in the cinema.',
+        }
+      ],
     };
   },
 }
