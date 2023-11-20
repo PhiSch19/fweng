@@ -46,19 +46,22 @@ const loginBtnClickHandler = () => {
 </script>
 
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>
-    |
-    <router-link to="/about">About</router-link>
-    |
-    <router-link to="/help">Help</router-link>
-    |
-    <router-link to="/imprint">Imprint</router-link>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button class="btn-blue" @click="registerBtnClickHandler()">register</button>
-    |
-    <button @click="loginBtnClickHandler()">login</button>
-  </nav>
+  <div class="grid grid-cols-2 gap-4 pt-2 pb-2">
+    <nav class="pt-3.5">
+      <router-link to="/">Home</router-link>
+      |
+      <router-link to="/about">About</router-link>
+      |
+      <router-link to="/help">Help</router-link>
+      |
+      <router-link to="/imprint">Imprint</router-link>
+    </nav>
+    <div class="pt-2">
+      <button class="btn-blue" @click="registerBtnClickHandler()">register</button>
+      &nbsp;
+      <button @click="loginBtnClickHandler()">login</button>
+    </div>
+  </div>
 
   <RegisterComponent v-if="registerShowState" class="modal"/>
   <LoginComponent v-if="loginShowState" class="modal"/>

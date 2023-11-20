@@ -1,38 +1,38 @@
 <template>
   <div class="modal">
     <h1>Register</h1>
-    <div>
-      <label for="firstName">First Name: </label>
+    <div class="grid grid-cols-2 gap-2">
+      <label class="text-right pr-3" for="firstName">First Name: </label>
       <input id="firstName" type="text"
              :value="firstName"
              @input="event => firstName = event.target.value"
       />
-      <br>
-      <label for="lastName">Last Name: </label>
+
+      <label class="text-right pr-3" for="lastName">Last Name: </label>
       <input id="lastName" type="text"
              :value="lastName"
              @input="event => lastName = event.target.value"
       />
-      <br>
-      <label for="email" type="email">Email: </label>
-      <input id="email" type="text"
+
+      <label class="text-right pr-3" for="email" type="email">Email: </label>
+      <input id="email" type="email"
              :value="email"
              @input="event => email = event.target.value"
       />
-      <br>
-      <label for="dob">Age: </label>
+
+      <label class="text-right pr-3" for="dob">Birthdate: </label>
       <input id="dob" type="date"
              :value="dob"
              @input="event => dob = event.target.value"
       />
-      <br>
-      <label for="password">Password: </label>
+
+      <label class="text-right pr-3" for="password">Password: </label>
       <input id="password" type="password"
              :value="password"
              @input="event => password = event.target.value"
       />
-      <br>
-      <button type="submit" @click="handleRegister()">register</button>
+
+      <button class="col-span-2" type="submit" @click="handleRegister()">register</button>
     </div>
   </div>
 </template>

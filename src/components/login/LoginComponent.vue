@@ -1,20 +1,22 @@
 <template>
   <div class="modal">
     <h1>Login</h1>
-    <label for="email" type="email">Email: </label>
-    <input id="email" type="text"
-           :value="email"
-           @input="event => email = event.target.value"
-    />
-    <br>
 
-    <label for="password">Password: </label>
-    <input id="password" type="password"
-           :value="password"
-           @input="event => password = event.target.value"
-    />
-    <br>
-    <button type="submit" @click="handleLoginBtnClick()">login</button>
+    <div class="grid grid-cols-2">
+      <label for="email" type="email">Email: </label>
+      <input id="email" type="text"
+             :value="email"
+             @input="event => email = event.target.value"
+      />
+
+      <label for="password">Password: </label>
+      <input id="password" type="password"
+             :value="password"
+             @input="event => password = event.target.value"
+      />
+
+      <button class="col-span-2 pl-1 pr-1" type="submit" @click="handleLoginBtnClick()">login</button>
+    </div>
   </div>
 </template>
 

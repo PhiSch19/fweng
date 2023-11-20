@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
 .btn {
     @apply bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow;
@@ -16,7 +17,6 @@
 
 
 nav {
-    padding: 30px;
 }
 
 nav a {
@@ -24,7 +24,7 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-    @apply bg-blue-500
+    @apply bg-blue-200
 }
 
 @layer base {
