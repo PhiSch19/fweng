@@ -39,7 +39,9 @@
 
 <script setup>
 import {inject, ref} from "vue";
-
+//import { useUserStore } from "@/store/userStore";
+//const apiUrl = process.env.VUE_APP_REGISTER_API_URL;
+const apiUrl = "http://localhost:8081/user/register"
 const errorHandler = inject("errors");
 
 const firstName = ref("");
@@ -50,14 +52,15 @@ const password = ref("");
 
 const handleRegister = async () => {
   const body = {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    email: email.value,
-    dob: dob.value,
+    //firstName: firstName.value,
+    //lastName: lastName.value,
+    username: email.value,
+    //dob: dob.value,
     password: password.value
   }
   try {
     const token = await register(body);
+    console.log(token)
   } catch (e) {
     errorHandler(e);
   }
@@ -66,15 +69,18 @@ const handleRegister = async () => {
 }
 
 const register = async (body) => {
-  const response = await fetch("/api/register", {
+  alert(apiUrl)
+  console.log(body);
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers: {"content-type": "application/json",},
     body: JSON.stringify(body)
   })
   if (response.status !== 200) {
+    alert(response.status);
+    alert(response.text);
     throw new Error("Could not register this user. Please try again");
   }
-
   return await response.json();
 
 }
