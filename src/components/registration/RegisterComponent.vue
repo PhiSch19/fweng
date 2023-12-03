@@ -39,10 +39,13 @@
 
 <script setup>
 import {inject, ref} from "vue";
-//import { useUserStore } from "@/store/userStore";
+import { useUserStore } from "@/store/userStore";
 //const apiUrl = process.env.VUE_APP_REGISTER_API_URL;
-const apiUrl = "http://localhost:8081/user/register"
+const apiRegisterUrl = "http://localhost:8081/user/register"
+const apiAuthenticateUrl = "http://localhost:8081/user/token"
+const showComp = inject("showRegisterComponent")
 const errorHandler = inject("errors");
+const userData = useUserStore()
 
 const firstName = ref("");
 const lastName = ref("");
@@ -59,8 +62,12 @@ const handleRegister = async () => {
     password: password.value
   }
   try {
-    const token = await register(body);
-    console.log(token)
+    // register new user
+    const registered = await register(body);
+    // if user was registered successfully use that to login user
+    const tokenResponse = await login(body)
+    showComp.value = false;
+
   } catch (e) {
     errorHandler(e);
   }
@@ -69,20 +76,34 @@ const handleRegister = async () => {
 }
 
 const register = async (body) => {
-  alert(apiUrl)
-  console.log(body);
-  const response = await fetch(apiUrl, {
+  const response = await fetch(apiRegisterUrl, {
+    method: "POST",
+    headers: {"content-type": "application/json",},
+    body: JSON.stringify(body)
+  })
+  if (response.status !== 201) {
+    throw new Error("Could not register this user. Please try again");
+  }
+  return true;  
+
+}
+
+const login = async (body) => {
+  const response = await fetch(apiAuthenticateUrl, {
     method: "POST",
     headers: {"content-type": "application/json",},
     body: JSON.stringify(body)
   })
   if (response.status !== 200) {
-    alert(response.status);
-    alert(response.text);
-    throw new Error("Could not register this user. Please try again");
+    throw new Error("Could not authenticate.");
   }
-  return await response.json();
-
+  const json_response = await response.json();
+  localStorage.setItem("access_token", json_response.token);
+  const parsed_token = JSON.parse(atob(json_response.token.split('.')[1]));
+  console.log(parsed_token);
+  userData.setUserName(parsed_token.username);
+  userData.setRole(parsed_token.role);
+  userData.setUserId(parsed_token.sub);
 }
 </script>
 

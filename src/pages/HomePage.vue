@@ -2,6 +2,10 @@
   <NavbarComponent/>
   <h1>HomePage</h1>
   <div>
+    <div>username: {{ userData.username }}</div>
+    <div>role: {{ userData.role }}</div>
+  </div>
+  <div>
     <h2>Why Choose Cinemagic?</h2>
     <ul>
       <li>Extensive Movie Selection</li>
@@ -29,6 +33,16 @@
     </ul>
   </div>
 </template>
+
+<script setup>
+import { useUserStore } from "@/store/userStore";
+const userData = useUserStore();
+/*
+username = ref(useUserStore.username);
+role = ref(useUserStore.role);
+*/
+
+</script>
 
 <script>
 import NavbarComponent from "../components/navbar/NavbarComponent.vue";

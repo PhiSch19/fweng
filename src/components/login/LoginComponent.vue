@@ -22,37 +22,47 @@
 
 <script setup>
 import {inject, ref} from "vue";
+import { useUserStore } from "@/store/userStore";
+const apiAuthenticateUrl = "http://localhost:8081/user/token";
 
+const userData = useUserStore();
+
+const showComp = inject("showLoginComponent");
 const errorHandler = inject("errors");
 
 const email = ref("");
 const password = ref("");
 
 async function handleLoginBtnClick() {
-  //alert(`email: ${email.value}, password: ${password.value}`);
-  const body = {username: email, password: password};
+  const body = {username: email.value, password: password.value};
   try {
-    const token_response = await issueToken(body);
+    const token_response = await login(body);
+    showComp.value = false;
   } catch (e) {
     await errorHandler(e);
-
   }
-
 }
 
-async function issueToken(body) {
-  const response = await fetch("/api/login", {
+
+const login = async (body) => {
+  console.log(body)
+  const response = await fetch(apiAuthenticateUrl, {
     method: "POST",
     headers: {"content-type": "application/json",},
     body: JSON.stringify(body)
   })
   if (response.status !== 200) {
-    throw new Error("invalid credentials");
+    throw new Error("Could not authenticate.");
   }
   const json_response = await response.json();
-  return json_response;
-
+  localStorage.setItem("access_token", json_response.token);
+  const parsed_token = JSON.parse(atob(json_response.token.split('.')[1]));
+  console.log(parsed_token);
+  userData.setUserName(parsed_token.username);
+  userData.setRole(parsed_token.role);
+  userData.setUserId(parsed_token.sub);
 }
+
 
 
 </script>

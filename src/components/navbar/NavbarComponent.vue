@@ -19,6 +19,8 @@ const errorHandler = async (e) => {
 
 }
 provide("errors", errorHandler);
+provide("showRegisterComponent", registerShowState);
+provide("showLoginComponent", loginShowState);
 
 
 // event handlers
@@ -49,6 +51,10 @@ const loginBtnClickHandler = () => {
   <div class="grid grid-cols-2 gap-4 pt-2 pb-2">
     <nav class="pt-3.5">
       <router-link to="/">Home</router-link>
+      |
+      <RouterLink to="/rooms">Rooms</RouterLink>
+      |
+      <RouterLink to="/movies">Movies</RouterLink>
       |
       <router-link to="/about">About</router-link>
       |
