@@ -1,0 +1,239 @@
+<template>
+  <div class="layover" v-on:click="dropSelf()">
+  <h1>{{ display }}</h1></div>
+  <div class="modal">
+      <form  @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h5 class="align-top mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Register</h5>
+          <div class="relative w-full flex items-center justify-center">
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="firstNameRules.name" :value="firstName" :placeholder="firstNameRules.name"
+                 :requiredLength="firstNameRules.requiredLength" 
+                 :isEmail="firstNameRules.isEmail" :isPassword="firstNameRules.isPassword"/>
+            </div>
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="lastNameRules.name" :value="lastName" :placeholder="lastNameRules.name"
+                 :requiredLength="lastNameRules.requiredLength" 
+                 :isEmail="lastNameRules.isEmail" :isPassword="lastNameRules.isPassword"/>
+            </div>
+          </div>
+          <GenderComponent class="relative mb-6 flex items-center justify-center"/>
+         
+          <div class="relative mb-6 flex items-center justify-center">
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="emailRules.name" :value="email" :placehoder="emailRules.name" :requiredLength="emailRules.requiredLength"
+                :isEmail="emailRules.isEmail" :isPassword="emailRules.isPassword" />
+            </div>
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="userNameRules.name" :value="userName" :placehoder="userNameRules.name" :requiredLength="userNameRules.requiredLength"
+                :isEmail="userNameRules.isEmail" :isPassword="userNameRules.isPassword" />
+            </div>
+
+          </div>
+          <div class="relative mb-6">
+            <CountrySelectComponent />
+          </div>
+
+          <div class="relative mb-6 flex items-center justify-center">
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="passwordRules.name" :value="password" :placeholder="passwordRules.name" 
+                                  :requiredLength="passwordRules.requiredLength" :isEmail="passwordRules.isEmail"
+                                  :isPassword="passwordRules.isPassword" />
+            </div>
+            <div class="w-1/3 relative mx-2">
+              <TextInputComponent :name="passwordRepeatRules.name" :value="passwordRepeat" :placeholder="passwordRepeatRules.name" 
+                                  :requiredLength="passwordRepeatRules.requiredLength" :isEmail="passwordRepeatRules.isEmail"
+                                  :isPassword="passwordRepeatRules.isPassword" />
+            </div>
+          </div>
+         
+          <div class="flex items-center justify-center">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+            type="submit"
+            @click="handleRegister()">
+                Register
+            </button>
+          </div>
+      </form>
+  </div>
+</template>
+
+<script setup>
+import {inject, provide, ref} from "vue";
+import { useUserStore } from "@/store/userStore";
+//import { object, string, number, date, InferType } from 'yup';
+const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
+const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
+
+const showComp = inject("showRegisterComponent")
+const errorHandler = inject("errors");
+const userData = useUserStore()
+const gender = ref(null);
+provide("gender", gender)
+const country = ref(null);
+
+
+const firstName = ref(null);
+const firstNameRules = ref({requiredLength: 1,
+                        name: "firstName",
+                        isPassword: false,
+                        isEmail: false,
+                        });
+provide(firstNameRules.value.name, firstName);
+
+const lastName = ref("");
+const lastNameRules = ref({requiredLength: 1,
+                        name: "lastName",
+                        isPassword: false,
+                        isEmail: false,
+                        });
+provide(lastNameRules.value.name, lastName);
+const email = ref("");
+const emailRules = ref({requiredLength: 5,
+                        name: "email",
+                        isPassword: false,
+                        isEmail: true
+                      });
+provide(emailRules.value.name, email);
+
+const userName = ref("");
+const userNameRules = ref({requiredLength: 3,
+                           name: "userName",
+                           isPassword: false,
+                           isEmail: false
+                        });
+provide(userNameRules.value.name, userName);
+
+const password = ref("");
+const passwordRules = ref({
+                          requiredLength: 12,
+                          name: "password",
+                          isPassword: true,
+                          isEmail: false
+                        });
+provide(passwordRules.value.name, password);
+
+const passwordRepeat = ref("");
+const passwordRepeatRules = ref({
+                          requiredLength: 12,
+                          name: "passwordRepead",
+                          isPassword: true,
+                          isEmail: false
+                        });
+provide(passwordRepeatRules.value.name, passwordRepeat)
+
+provide("country", country);
+
+
+const  dropSelf = async () => {
+        refreshForm();
+        showComp.value = false;
+    }
+
+
+const handleRegister = async () => {
+  console.log("driven values");
+  console.log(firstName.value + " " +lastName.value)
+  console.log(email.value + " " + userName.value)
+
+  const body = {
+    //firstName: firstName.value,
+    //lastName: lastName.value,
+    username: email.value,
+    //dob: dob.value,
+    password: password.value
+  }
+  try {
+    // register new user
+    const registered = await register(body);
+    // if user was registered successfully use that to login user
+    const tokenResponse = await login(body)
+    refreshForm();
+    showComp.value = false;
+
+
+  } catch (e) {
+    errorHandler(e);
+  }
+
+
+}
+
+const register = async (body) => {
+  const response = await fetch(apiRegisterUrl, {
+    method: "POST",
+    headers: {"content-type": "application/json",},
+    body: JSON.stringify(body)
+  })
+  if (response.status !== 201) {
+    throw new Error("Could not register this user. Please try again");
+  }
+  return true;  
+
+}
+
+const login = async (body) => {
+  const response = await fetch(apiAuthenticateUrl, {
+    method: "POST",
+    headers: {"content-type": "application/json",},
+    body: JSON.stringify(body)
+  })
+  if (response.status !== 200) {
+    throw new Error("Could not authenticate.");
+  }
+  const json_response = await response.json();
+  userData.setToken(json_response);
+  
+}
+
+const refreshForm = () => {
+  firstName.value = "";
+  lastName.value = "";
+  email.value = "";
+  userName.value = "";
+  password.value = "";
+  passwordRepeat.value = "";
+
+
+
+
+}
+</script>
+
+<script>
+import GenderComponent from "./GenderComponent.vue";
+import CountrySelectComponent from "./CountrySelectComponent.vue";
+import TextInputComponent from "../TextInputComponent.vue";
+export default {
+  name: "RegisterComponent",
+  components: {
+      GenderComponent,
+      CountrySelectComponent,
+      TextInputComponent
+    }
+}
+</script>
+
+<style scoped>
+.layover {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 100%;
+    width: 100%;
+    background-color: grey;
+    opacity: 0.75;
+}
+.modal {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  height: 30rem;
+  width: 80%;
+  opacity: 1
+  /*border: black solid 2px;
+  border-radius: 5px;
+  background-color: white;
+  */
+}
+
+</style>

@@ -1,6 +1,6 @@
 <template>
   <NavbarComponent/>
-  <h1>HomePage</h1>
+  <h1>HomePage {{ apiUrl }}</h1>
   <div>
     <div>username: {{ userData.username }}</div>
     <div>role: {{ userData.role }}</div>
@@ -36,6 +36,10 @@
 
 <script setup>
 import { useUserStore } from "@/store/userStore";
+// this .env stuff is not working. I have no Idea why. sucks...
+import {ref} from "vue";
+const apiUrl = ref(process.env.VUE_APP_API);
+
 const userData = useUserStore();
 /*
 username = ref(useUserStore.username);

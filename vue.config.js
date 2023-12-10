@@ -1,3 +1,5 @@
+
+/*
 const Dotenv = require('dotenv-webpack');
 
 
@@ -8,6 +10,7 @@ module.exports = {
     ]
   }
 }
+*/
 
 
 const {defineConfig} = require('@vue/cli-service')

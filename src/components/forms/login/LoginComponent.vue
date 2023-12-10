@@ -1,5 +1,6 @@
 <template>
-  <div class="modal">
+  <!--<div class="modal">  -->
+  <form @submit.prevent="submitForm" class="modal">
     <h1>Login</h1>
 
     <div class="grid grid-cols-2">
@@ -17,7 +18,8 @@
 
       <button class="col-span-2 pl-1 pr-1" type="submit" @click="handleLoginBtnClick()">login</button>
     </div>
-  </div>
+  </form>
+  <!--</div> -->
 </template>
 
 <script setup>
@@ -55,12 +57,15 @@ const login = async (body) => {
     throw new Error("Could not authenticate.");
   }
   const json_response = await response.json();
+  userData.setToken(json_response);
+  /*
   localStorage.setItem("access_token", json_response.token);
   const parsed_token = JSON.parse(atob(json_response.token.split('.')[1]));
   console.log(parsed_token);
   userData.setUserName(parsed_token.username);
   userData.setRole(parsed_token.role);
   userData.setUserId(parsed_token.sub);
+  */
 }
 
 
