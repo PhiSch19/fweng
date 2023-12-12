@@ -4,12 +4,18 @@ import ImprintPage from '../pages/ImprintPage.vue'
 import HelpPage from '../pages/HelpPage.vue'
 import MoviesPage from '../pages/MoviesPage.vue'
 import RoomsPage from '../pages/RoomsPage.vue'
+import ProfilePage from '../pages/ProfilePage.vue'
 
 const routes = [
     {
         path: '/',
         name: 'home',
         component: HomePage
+    },
+    {
+        path: "/profile",
+        name: "profile",
+        component: ProfilePage
     },
     {   
         path: "/movies",

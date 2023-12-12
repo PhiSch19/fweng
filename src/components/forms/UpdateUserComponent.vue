@@ -39,11 +39,6 @@
                                     :requiredLength="passwordRules.requiredLength" :isEmail="passwordRules.isEmail"
                                     :isPassword="passwordRules.isPassword" />
               </div>
-              <div class="w-1/3 relative mx-2">
-                <TextInputComponent :name="passwordRepeatRules.name" :value="passwordRepeat" :placeholder="passwordRepeatRules.placehoder" 
-                                    :requiredLength="passwordRepeatRules.requiredLength" :isEmail="passwordRepeatRules.isEmail"
-                                    :isPassword="passwordRepeatRules.isPassword" />
-              </div>
             </div>
            
             <div class="flex items-center justify-center">
@@ -58,21 +53,24 @@
   </template>
   
   
-  
-  
   <script setup>
   import {inject, provide, ref} from "vue";
   import { useUserStore } from "@/store/userStore";
   //import { object, string, number, date, InferType } from 'yup';
-  const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
-  const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
+ const apiUrl = process.env.VUE_APP_API_USER;
   
   const showComp = inject("showUserComponent");
   const errorHandler = inject("errors");
   const userData = useUserStore();
 
   const gender = ref(userData.gender);
-  provide("gender", gender)
+  const genderRules = ref({requiredLength: 2,
+                          name: "gender",
+                          isPassword: false,
+                          isEmail: false
+  
+  })
+  provide(genderRules.value.name, gender)
   const country = ref(userData.country);
   
   
@@ -116,16 +114,13 @@
                           });
   provide(passwordRules.value.name, password);
   
-  const passwordRepeat = ref("");
-  const passwordRepeatRules = ref({
-                            requiredLength: 12,
-                            name: "passwordRepead",
-                            isPassword: true,
+  const countryRules = ref({requiredLength: 2,
+                            name: "country",
+                            isPassword: false,
                             isEmail: false
-                          });
-  provide(passwordRepeatRules.value.name, passwordRepeat)
-  
-  provide("country", country);
+  })
+
+  provide(countryRules.value.name, country);
   
   
   const  dropSelf = async () => {
@@ -133,58 +128,115 @@
       }
   
   
+const validated = (val, requirement, ignoreNull) => {
+    if(ignoreNull){
+      if (isEmpty(val)){return null;}
+    }
+    
+    if (val.length < requirement.requiredLength){throw new Error(`${requirement.name} is to short. min ${requirement.requiredLength} characters.`);}
+    if(requirement.isPassword){
+        if (!isStrongPassword(val)){
+          throw new Error(`${requirement.name} does not meet password requirements`);
+        }
+
+    }
+    if(requirement.isEmail){
+      if(!emailMet(val)){
+        throw new Error(`${requirement.name} is not a valid email address`);
+      }
+
+    }
+    return val;
+}
+const isStrongPassword = (val) => {
+
+// Check if the password includes at least one uppercase letter
+if (!/[A-Z]/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one lowercase letter
+if (!/[a-z]/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one number
+if (!/\d/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one symbol
+if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\-]/.test(val)) {
+  return false;
+}
+
+// If all conditions are met, the password is strong
+return true;
+}
+const emailMet = (val)=> {
+        return String(val)
+        .toLowerCase()
+        .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+}
+  const isEmpty = (value) => {
+  return (value == null || (typeof value === "string" && value.trim().length === 0));
+}
+
+
   const handleUpate = async () => {
     console.log("driven values");
-
-
-  
     const body = {
-      //firstName: firstName.value,
-      //lastName: lastName.value,
-      username: email.value,
-      //dob: dob.value,
-      password: password.value
+      firstName: validated(firstName.value, firstNameRules.value, true),
+      lastName: validated(lastName.value, lastNameRules.value, true),
+      username: validated(userName.value, userNameRules.value, true),
+      email: validated(email.value, emailRules.value, true),
+      gender: validated(gender.value, genderRules.value, true),
+      password: validated(password.value, passwordRules.value, true),
+      country: validated(country.value, countryRules.value, true)
     }
+    console.log(body)
     try {
       // register new user
-      const registered = await register(body);
-      // if user was registered successfully use that to login user
-      const tokenResponse = await login(body)
+      const updated = await update(userData.userId, body);
+      console.log(updated);
       showComp.value = false;
   
     } catch (e) {
       errorHandler(e);
-    }
-  
-  
+    }  
   }
   
-  const register = async (body) => {
-    const response = await fetch(apiRegisterUrl, {
-      method: "PATCH",
-      headers: {"content-type": "application/json",},
+  const update = async (userId, body) => {
+    const response = await fetch(apiUrl + "/" + userId, {
+      method: "PUT",
+      headers: {"content-type": "application/json",
+                "authorization": userData.getToken(),
+    },
       body: JSON.stringify(body)
     })
-    if (response.status !== 201) {
-      throw new Error("Could not register this user. Please try again");
-    }
-    return true;  
-  
-  }
-  
-  const login = async (body) => {
-    const response = await fetch(apiAuthenticateUrl, {
-      method: "POST",
-      headers: {"content-type": "application/json",},
-      body: JSON.stringify(body)
-    })
-    if (response.status !== 200) {
-      throw new Error("Could not authenticate.");
+    if (response.status > 202) {
+      throw new Error("Could not register update this user. Please try again");
+
     }
     const json_response = await response.json();
-    userData.setToken(json_response);
+    patchUser(body);
+    return json_response;
+  }
+
+  const patchUser = (patch) => {
+    if (patch.userName){userData.setUserName(patch.UserName);}
+    if (patch.firstName){ userData.setFirstName(patch.firstName);}
+    if (patch.lastName){userData.setLastName(patch.lastName);}
+    if(patch.email){userData.setEmail(patch.email);}
+    if(patch.gender) {userData.setGender(patch.gender);}
+    if(patch.country){userData.setCountry(patch.country);}
 
   }
+
+
   </script>
   
   <script>

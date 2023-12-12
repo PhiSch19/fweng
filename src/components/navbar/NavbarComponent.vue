@@ -1,10 +1,13 @@
 <template>
   <div class="grid grid-cols-2 gap-4 pt-2 pb-2">
     <nav class="pt-3.5 flex" >
-      <img v-if="isLoggedIn" src="../../assets/default_cover.jpg"  class="w-10 h-10 rounded-full mx-8" 
-      @click="userBtnClickHandler()"
-      
-      />
+
+      <router-link to="/profile" v-if="isLoggedIn">
+        <img src="../../assets/default_cover.jpg"  class="w-10 h-10 rounded-full mx-8" 
+        @click="userBtnClickHandler()"
+        
+        />
+      </router-link>
 
       <router-link to="/">Home</router-link>
       
@@ -19,11 +22,11 @@
       <router-link to="/imprint" class="mx-4"> Imprint</router-link>
     </nav>
     <div class="pt-2">
-      <button class="btn-blue" @click="registerBtnClickHandler()">register</button>
+      <button class="btn-blue" v-if="!isLoggedIn" @click="registerBtnClickHandler()">register</button>
       &nbsp;
 
-      <button @click="userData.logout()" v-if="isLoggedIn">logout</button>
-      <button @click="loginBtnClickHandler()" v-else>login</button>
+      <button @click="logout()" v-if="isLoggedIn" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">logout</button>
+      <button @click="loginBtnClickHandler()" v-else >login</button>
     </div>
   </div>
 
@@ -95,6 +98,11 @@ const userBtnClickHandler = () => {
   }
 }
 
+const logout = () => {
+  userData.logout();
+  router.push({path: "/"})
+}
+
 </script>
 
 
@@ -104,6 +112,7 @@ import RegisterComponent from "../forms/registration/RegisterComponent.vue";
 import LoginComponent from "../forms/login/LoginComponent.vue"
 import UpdateUserComponent from "../forms/UpdateUserComponent.vue"
 import ErrorModal from "../error/ErrorModal.vue";
+import router from "@/router";
 
 export default {
   name: "NavbarComponent",

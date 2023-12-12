@@ -3,22 +3,25 @@ import {defineStore} from 'pinia';
 export const useUserStore = defineStore('user', {
     state: () => ({
         userId: "",
+        firstName: "",
+        lastName: "",
         username: "guest",
+        email: "",
+        country: "",
         role: "Visitor",
-
     }),
     
     actions: {
         // setters
-        setUserName(newName) {
-            this.username = newName;
-        },
-        setUserId(newUserId) {
-            this.userId = newUserId;
-        },
-        setRole(newRole) {
-            this.role = newRole;
-        },
+        setUserName(newName) {this.username = newName;},
+        setUserId(newUserId) {this.userId = newUserId;},
+        setRole(newRole) {this.role = newRole;},
+        setFirstName(newFirstName){this.firstName = newFirstName;},
+        setLastName(newLastName){this.lastName = newLastName;},
+        setCountry(newCountry){this.country = newCountry;},
+        setGender(newGender){this.gender = newGender;},
+        setEmail(newEmail){this.email = newEmail;},
+
         setToken(obj) {
             // manages to retrieve issued token
             localStorage.setItem("access_token", "Bearer " + obj.token);
@@ -27,6 +30,11 @@ export const useUserStore = defineStore('user', {
             this.setUserName(parsed_token.username);
             this.setRole(parsed_token.role);
             this.setUserId(parsed_token.sub);
+            this.setFirstName(parsed_token.firstName);
+            this.setLastName(parsed_token.lastName);
+            this.setGender(parsed_token.gender);
+            this.setCountry(parsed_token.country);
+            this.setEmail(parsed_token.email);
         },
         // getters
         getToken(){
@@ -46,6 +54,11 @@ export const useUserStore = defineStore('user', {
             this.role = "Visitor";
             this.username = "guest";
             this.userId = ""
+            this.firstName = "";
+            this.lastName = "";
+            this.email = "";
+            this.gender = "";
+            this.country = "";
             localStorage.setItem("access_token", null);
         },
     }

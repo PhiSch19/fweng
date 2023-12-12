@@ -68,8 +68,17 @@ const showComp = inject("showRegisterComponent")
 const errorHandler = inject("errors");
 const userData = useUserStore()
 const gender = ref(null);
-provide("gender", gender)
 const country = ref(null);
+
+provide("gender", gender)
+const genderRules = ref({requiredLength: 2,
+                          name: "gender",
+                          isPassword: false,
+                          isEmail: false
+  
+  })
+  provide(genderRules.value.name, gender)
+
 
 
 const firstName = ref(null);
@@ -121,7 +130,13 @@ const passwordRepeatRules = ref({
                         });
 provide(passwordRepeatRules.value.name, passwordRepeat)
 
-provide("country", country);
+const countryRules = ref({requiredLength: 2,
+                            name: "country",
+                            isPassword: false,
+                            isEmail: false
+  })
+
+  provide(countryRules.value.name, country);
 
 
 const  dropSelf = async () => {
@@ -130,19 +145,23 @@ const  dropSelf = async () => {
     }
 
 
-const handleRegister = async () => {
-  console.log("driven values");
-  console.log(firstName.value + " " +lastName.value)
-  console.log(email.value + " " + userName.value)
-
-  const body = {
-    //firstName: firstName.value,
-    //lastName: lastName.value,
-    username: email.value,
-    //dob: dob.value,
-    password: password.value
-  }
+const handleRegister = async () => {  
   try {
+    // check register form input on client side
+    const body = {
+      firstName: validated(firstName.value, firstNameRules.value, false),
+      lastName: validated(lastName.value, lastNameRules.value, false),
+      username: validated(userName.value, userNameRules.value, false),
+      email: validated(email.value, emailRules.value, false),
+      gender: validated(gender.value, genderRules.value, false),
+      password: validated(password.value, passwordRules.value, false),
+      country: validated(country.value, countryRules.value, false)
+    }
+    if(password.value!==passwordRepeat.value){
+      throw new Error("password does not equal password repeat");
+    }
+
+
     // register new user
     const registered = await register(body);
     // if user was registered successfully use that to login user
@@ -192,11 +211,65 @@ const refreshForm = () => {
   userName.value = "";
   password.value = "";
   passwordRepeat.value = "";
+}
 
+const validated = (val, requirement, ignoreNull) => {
+    if(ignoreNull){
+      if (isEmpty(val)){return null;}
+    }
+    
+    if (val.length < requirement.requiredLength){throw new Error(`${requirement.name} is to short. min ${requirement.requiredLength} characters.`);}
+    if(requirement.isPassword){
+        if (!isStrongPassword(val)){
+          throw new Error(`${requirement.name} does not meet password requirements`);
+        }
 
+    }
+    if(requirement.isEmail){
+      if(!emailMet(val)){
+        throw new Error(`${requirement.name} is not a valid email address`);
+      }
 
+    }
+    return val;
+}
+const isStrongPassword = (val) => {
+
+// Check if the password includes at least one uppercase letter
+if (!/[A-Z]/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one lowercase letter
+if (!/[a-z]/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one number
+if (!/\d/.test(val)) {
+  return false;
+}
+
+// Check if the password includes at least one symbol
+if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\-]/.test(val)) {
+  return false;
+}
+
+// If all conditions are met, the password is strong
+return true;
+}
+const emailMet = (val)=> {
+        return String(val)
+        .toLowerCase()
+        .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
 
 }
+  const isEmpty = (value) => {
+  return (value == null || (typeof value === "string" && value.trim().length === 0));
+}
+
 </script>
 
 <script>

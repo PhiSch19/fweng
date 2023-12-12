@@ -58,14 +58,6 @@ const login = async (body) => {
   }
   const json_response = await response.json();
   userData.setToken(json_response);
-  /*
-  localStorage.setItem("access_token", json_response.token);
-  const parsed_token = JSON.parse(atob(json_response.token.split('.')[1]));
-  console.log(parsed_token);
-  userData.setUserName(parsed_token.username);
-  userData.setRole(parsed_token.role);
-  userData.setUserId(parsed_token.sub);
-  */
 }
 
 

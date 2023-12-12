@@ -28,7 +28,6 @@ const props = defineProps({
         })
 
 const name = ref(props.name);
-//const placeholder = ref(props.placeholder)
 const value = inject(props.name);
 const requirementsMet = ref(false);
 const setValue = (e) => {
