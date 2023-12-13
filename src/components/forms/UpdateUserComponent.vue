@@ -188,7 +188,9 @@ const emailMet = (val)=> {
 
   const handleUpate = async () => {
     console.log("driven values");
-    const body = {
+    
+    try {
+      const body = {
       firstName: validated(firstName.value, firstNameRules.value, true),
       lastName: validated(lastName.value, lastNameRules.value, true),
       username: validated(userName.value, userNameRules.value, true),
@@ -198,7 +200,7 @@ const emailMet = (val)=> {
       country: validated(country.value, countryRules.value, true)
     }
     console.log(body)
-    try {
+
       // register new user
       const updated = await update(userData.userId, body);
       console.log(updated);
