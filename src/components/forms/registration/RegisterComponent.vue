@@ -149,13 +149,15 @@ const handleRegister = async () => {
   try {
     // check register form input on client side
     const body = {
-      firstName: validated(firstName.value, firstNameRules.value, false),
-      lastName: validated(lastName.value, lastNameRules.value, false),
       username: validated(userName.value, userNameRules.value, false),
-      email: validated(email.value, emailRules.value, false),
-      gender: validated(gender.value, genderRules.value, false),
       password: validated(password.value, passwordRules.value, false),
-      country: validated(country.value, countryRules.value, false)
+      details: {
+        firstname: validated(firstName.value, firstNameRules.value, false),
+        lastname: validated(lastName.value, lastNameRules.value, false),
+        email: validated(email.value, emailRules.value, false),
+        salutation: validated(gender.value, genderRules.value, false),
+        country: validated(country.value, countryRules.value, false),
+      },
     }
     if(password.value!==passwordRepeat.value){
       throw new Error("password does not equal password repeat");
@@ -218,7 +220,7 @@ const validated = (val, requirement, ignoreNull) => {
       if (isEmpty(val)){return null;}
     }
     
-    if (val.length < requirement.requiredLength){throw new Error(`${requirement.name} is to short. min ${requirement.requiredLength} characters.`);}
+    if (val?.length < requirement.requiredLength){throw new Error(`${requirement.name} is to short. min ${requirement.requiredLength} characters.`);}
     if(requirement.isPassword){
         if (!isStrongPassword(val)){
           throw new Error(`${requirement.name} does not meet password requirements`);
