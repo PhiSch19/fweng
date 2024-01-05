@@ -25,9 +25,11 @@
 <script setup>
 import {inject, ref} from "vue";
 import { useUserStore } from "@/store/userStore";
+import {UserService} from "@/services/UserService";
 const apiAuthenticateUrl = "http://localhost:8081/user/token";
 
 const userData = useUserStore();
+const userService = new UserService(userData);
 
 const showComp = inject("showLoginComponent");
 const errorHandler = inject("errors");
@@ -41,6 +43,7 @@ async function handleLoginBtnClick() {
     const token_response = await login(body);
     showComp.value = false;
   } catch (e) {
+    console.log(e);
     await errorHandler(e);
   }
 }
@@ -58,6 +61,7 @@ const login = async (body) => {
   }
   const json_response = await response.json();
   userData.setToken(json_response);
+  await userService.fillStoreFromApi();
 }
 
 

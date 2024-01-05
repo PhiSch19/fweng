@@ -45,6 +45,15 @@
                                   :isPassword="passwordRepeatRules.isPassword" />
             </div>
           </div>
+        <div class="relative mb-6 flex items-center justify-center">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="profilePicture">
+            Profile Picture
+          </label>
+          <input class="shadow appearance-none border rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                 id="profilePicture" type="file"
+                 @change="onProfilePictureSelected"
+          />
+        </div>
          
           <div class="flex items-center justify-center">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -63,6 +72,7 @@ import { useUserStore } from "@/store/userStore";
 //import { object, string, number, date, InferType } from 'yup';
 const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
 const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
+const apiUserUrl = process.env.VUE_APP_API_USER;
 
 const showComp = inject("showRegisterComponent")
 const errorHandler = inject("errors");
@@ -138,6 +148,12 @@ const countryRules = ref({requiredLength: 2,
 
   provide(countryRules.value.name, country);
 
+const profilePicture = ref("");
+
+const onProfilePictureSelected = (e) => {
+  profilePicture.value = e.target.files[0]
+}
+
 
 const  dropSelf = async () => {
         refreshForm();
@@ -167,7 +183,7 @@ const handleRegister = async () => {
     // register new user
     const registered = await register(body);
     // if user was registered successfully use that to login user
-    const tokenResponse = await login(body)
+    const tokenResponse = await login(body);
     refreshForm();
     showComp.value = false;
 
@@ -185,10 +201,31 @@ const register = async (body) => {
     headers: {"content-type": "application/json",},
     body: JSON.stringify(body)
   })
-  if (response.status !== 201) {
+  if (response.status !== 200) {
     throw new Error("Could not register this user. Please try again");
   }
+  const jsonResponse = await response.json();
+  uploadProfilePicture(jsonResponse.id);
+
   return true;  
+
+}
+
+const uploadProfilePicture = async (id) => {
+
+  const body = new FormData();
+  body.append('file', profilePicture.value);
+
+  const url = apiUserUrl + "/" + id + "/profile-picture"
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {},
+    body: body
+  });
+  if (response.status !== 200) {
+    throw new Error("Could not upload profile picture.");
+  }
 
 }
 

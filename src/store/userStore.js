@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', {
         email: "",
         country: "",
         role: "Visitor",
+        profilePictureId: null
     }),
     
     actions: {
@@ -21,20 +22,15 @@ export const useUserStore = defineStore('user', {
         setCountry(newCountry){this.country = newCountry;},
         setGender(newGender){this.gender = newGender;},
         setEmail(newEmail){this.email = newEmail;},
+        setProfilePictureId(id) {this.profilePictureId = id;},
 
         setToken(obj) {
             // manages to retrieve issued token
             localStorage.setItem("access_token", "Bearer " + obj.token);
             const parsed_token = JSON.parse(atob(obj.token.split('.')[1]));
-            //console.log(parsed_token);
             this.setUserName(parsed_token.username);
             this.setRole(parsed_token.role);
             this.setUserId(parsed_token.sub);
-            this.setFirstName(parsed_token.firstName);
-            this.setLastName(parsed_token.lastName);
-            this.setGender(parsed_token.gender);
-            this.setCountry(parsed_token.country);
-            this.setEmail(parsed_token.email);
         },
         // getters
         getToken(){
