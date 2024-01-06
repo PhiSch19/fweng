@@ -69,6 +69,7 @@
 <script setup>
 import {inject, provide, ref} from "vue";
 import { useUserStore } from "@/store/userStore";
+import {UserService} from "@/services/UserService";
 //import { object, string, number, date, InferType } from 'yup';
 const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
 const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
@@ -76,7 +77,8 @@ const apiUserUrl = process.env.VUE_APP_API_USER;
 
 const showComp = inject("showRegisterComponent")
 const errorHandler = inject("errors");
-const userData = useUserStore()
+const userData = useUserStore();
+const userService = new UserService(userData);
 const gender = ref(null);
 const country = ref(null);
 
@@ -182,8 +184,6 @@ const handleRegister = async () => {
 
     // register new user
     const registered = await register(body);
-    // if user was registered successfully use that to login user
-    const tokenResponse = await login(body);
     refreshForm();
     showComp.value = false;
 
@@ -205,6 +205,7 @@ const register = async (body) => {
     throw new Error("Could not register this user. Please try again");
   }
   const jsonResponse = await response.json();
+  await login(body);
   uploadProfilePicture(jsonResponse.id);
 
   return true;  
@@ -220,7 +221,7 @@ const uploadProfilePicture = async (id) => {
 
   const response = await fetch(url, {
     method: "POST",
-    headers: {},
+    headers: {"Authorization": userData.getToken(),},
     body: body
   });
   if (response.status !== 200) {
@@ -240,7 +241,7 @@ const login = async (body) => {
   }
   const json_response = await response.json();
   userData.setToken(json_response);
-  
+  await userService.fillStoreFromApi();
 }
 
 const refreshForm = () => {

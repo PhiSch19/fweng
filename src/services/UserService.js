@@ -2,20 +2,23 @@ const apiUserUrl = process.env.VUE_APP_API_USER;
 
 export class UserService {
 
-    userStore;
+    $userStore;
 
     constructor(userStore) {
-        this.userStore = userStore;
+        this.$userStore = userStore;
     }
 
     async fillStoreFromApi() {
-        let userStore = this.userStore;
+        const userStore = this.$userStore;
         if(!userStore.userId) {
             return;
         }
         const response = await fetch(apiUserUrl + "/" + userStore.userId + "/details", {
             method: "GET",
-            headers: {"content-type": "application/json",},
+            headers: {
+                "content-type": "application/json",
+                "Authorization": userStore.getToken(),
+            },
         })
         if (response.status !== 200) {
             throw new Error("Could not register this user. Please try again");
