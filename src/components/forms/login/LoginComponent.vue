@@ -2,18 +2,24 @@
   <!--<div class="modal">  -->
   <form @submit.prevent="submitForm" class="modal">
     <h1>Login</h1>
-
     <div class="grid grid-cols-2">
-      <label for="email" type="email">Email: </label>
-      <input id="email" type="text"
-             :value="email"
-             @input="event => email = event.target.value"
+    <label for="userName">UserName: </label>
+      <TextInputComponent 
+        v-model:value="userName"
+        v-model:satisfied="userNameSatisfied"
+        id="userName"
+        name="user name"
+        :isRequired="false"
+        :requiredLength="0"
       />
-
       <label for="password">Password: </label>
-      <input id="password" type="password"
-             :value="password"
-             @input="event => password = event.target.value"
+      <PasswordInputComponent 
+          v-model:value="password"
+          v-model:satisfied="passwordSatisfied"
+          id="password"
+          name="password"
+          :isRequired="false"
+          :requiredLength="0"
       />
 
       <button class="col-span-2 pl-1 pr-1" type="submit" @click="handleLoginBtnClick()">login</button>
@@ -34,11 +40,14 @@ const userService = new UserService(userData);
 const showComp = inject("showLoginComponent");
 const errorHandler = inject("errors");
 
-const email = ref("");
+const userName = ref("");
+const userNameSatisfied = ref(true);
 const password = ref("");
+const passwordSatisfied = ref(true);
 
 async function handleLoginBtnClick() {
-  const body = {username: email.value, password: password.value};
+  console.log(`userName: ${userName.value}`)
+  const body = {username: userName.value, password: password.value};
   try {
     const token_response = await login(body);
     showComp.value = false;
@@ -69,8 +78,13 @@ const login = async (body) => {
 </script>
 
 <script>
+import TextInputComponent from "@/components/atoms/TextInputComponent.vue";
+import PasswordInputComponent from "@/components/atoms/PasswordInputComponent.vue";
 export default {
-  name: "LoginComponent"
+  name: "LoginComponent",
+  components: {TextInputComponent,
+              PasswordInputComponent,
+  }
 }
 
 </script>

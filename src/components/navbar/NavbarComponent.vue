@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 gap-4 pt-2 pb-2">
     <nav class="pt-3.5 flex" >
 
-      <router-link to="/profile" v-if="isLoggedIn">
+      <router-link to="/profile" v-if="userRights">
         <img src="../../assets/default_cover.jpg"  class="w-10 h-10 rounded-full mx-8" 
         @click="userBtnClickHandler()"
         
@@ -11,7 +11,7 @@
 
       <router-link to="/">Home</router-link>
       
-      <RouterLink to="/rooms" v-if="userData.isAdmin()" class="mx-4"> Rooms</RouterLink>
+      <RouterLink to="/rooms" v-if="adminRights" class="mx-4"> Rooms</RouterLink>
       
       <RouterLink to="/movies" class="mx-4"> Movies</RouterLink>
       
@@ -22,10 +22,10 @@
       <router-link to="/imprint" class="mx-4"> Imprint</router-link>
     </nav>
     <div class="pt-2">
-      <button class="btn-blue" v-if="!isLoggedIn" @click="registerBtnClickHandler()">register</button>
+      <button class="btn-blue" v-if="!userRights" @click="registerBtnClickHandler()">register</button>
       &nbsp;
 
-      <button @click="logout()" v-if="isLoggedIn" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">logout</button>
+      <button @click="logout()" v-if="userRights" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">logout</button>
       <button @click="loginBtnClickHandler()" v-else >login</button>
     </div>
   </div>
@@ -43,15 +43,23 @@
 /* component state management. Frontend only reacts to state variables marked via ref */
 import {provide, ref, computed} from "vue";
 import { useUserStore } from "@/store/userStore";
+import { sufficientRole } from "@/composables/roles";
 const userData = useUserStore();
 
+// role ri
+const adminRights = computed(() => {const res = sufficientRole("ROLE_ADMIN", userData.role); return res;});
+//console.log(`adminRights: ${adminRights.value}`);
+//const staffRights = computed(sufficientRole("ROLE_STAFF", userData.role));
+const userRights = computed(() => {const res = sufficientRole("ROLE_USER", userData.role); return res;});
+
 // state
+
 const registerShowState = ref(false);
 const loginShowState = ref(false);
 const showUserModel = ref(false);
 const errorMessage = ref("");
 const currentError = ref(false)
-const isLoggedIn = computed(() => {if(userData.userId === ""){return false;} return true;})
+//const isLoggedIn = computed(() => {if(userData.userId === ""){return false;} return true;})
 
 //error Handler
 const errorHandler = async (e) => {

@@ -6,26 +6,47 @@
           <h5 class="align-top mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Register</h5>
           <div class="relative w-full flex items-center justify-center">
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="firstNameRules.name" :value="firstName" :placeholder="firstNameRules.name"
-                 :requiredLength="firstNameRules.requiredLength" 
-                 :isEmail="firstNameRules.isEmail" :isPassword="firstNameRules.isPassword"/>
+              
+              <TextInputComponent 
+                v-model:value="firstName"
+                :name="firstNameRules.name"
+                :isRequired="firstNameRules.isRequired"
+                :requiredLength="firstNameRules.requiredLength"
+                :setSatisfied="firstNameRules.setSatisfied"
+                />
+              
             </div>
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="lastNameRules.name" :value="lastName" :placeholder="lastNameRules.name"
-                 :requiredLength="lastNameRules.requiredLength" 
-                 :isEmail="lastNameRules.isEmail" :isPassword="lastNameRules.isPassword"/>
+              <TextInputComponent 
+                v-model:value="lastName"
+                v-model:satisfied="lastNameSatisfied"
+                :name="lastNameRules.name"
+                :isRequired="lastNameRules.isRequired"
+                :requiredLength="lastNameRules.requiredLength"
+                :setSatisfied="lastNameRules.setSatisfied"
+                />
             </div>
           </div>
           <GenderComponent class="relative mb-6 flex items-center justify-center"/>
          
           <div class="relative mb-6 flex items-center justify-center">
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="emailRules.name" :value="email" :placehoder="emailRules.name" :requiredLength="emailRules.requiredLength"
-                :isEmail="emailRules.isEmail" :isPassword="emailRules.isPassword" />
+              <EmailInputComponent
+              v-model:value="email"
+              :name="emailRules.name"
+              :isRequired="emailRules.isRequired"
+              :setSatisfied="emailRules.setSatisfied"
+              />
             </div>
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="userNameRules.name" :value="userName" :placehoder="userNameRules.name" :requiredLength="userNameRules.requiredLength"
-                :isEmail="userNameRules.isEmail" :isPassword="userNameRules.isPassword" />
+              
+              <TextInputComponent
+              v-model:value="userName"
+              :name="userNameRules.name"
+              :isRequired="userNameRules.isRequired"
+              :requiredLength="userNameRules.requiredLength"
+              :setSatisfied="userNameRules.setSatisfied"
+              />
             </div>
 
           </div>
@@ -35,14 +56,22 @@
 
           <div class="relative mb-6 flex items-center justify-center">
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="passwordRules.name" :value="password" :placeholder="passwordRules.name" 
-                                  :requiredLength="passwordRules.requiredLength" :isEmail="passwordRules.isEmail"
-                                  :isPassword="passwordRules.isPassword" />
+              
+              <PasswordInputComponent
+              v-model:value="password"
+              :name="passwordRules.name"
+              :isRequired="passwordRules.isRequired"
+              :requiredLength="passwordRules.requiredLength"
+              :setSatisfied="passwordRules.setSatisfied" />
             </div>
             <div class="w-1/3 relative mx-2">
-              <TextInputComponent :name="passwordRepeatRules.name" :value="passwordRepeat" :placeholder="passwordRepeatRules.name" 
-                                  :requiredLength="passwordRepeatRules.requiredLength" :isEmail="passwordRepeatRules.isEmail"
-                                  :isPassword="passwordRepeatRules.isPassword" />
+              
+              <PasswordInputComponent
+              v-model:value="passwordRepeat"
+              :name="passwordRepeatRules.name"
+              :isRequired="passwordRepeatRules.isRequired"
+              :requiredLength="passwordRepeatRules.requiredLength"
+              :setSatisfied="passwordRepeatRules.setSatisfied" />
             </div>
           </div>
         <div class="relative mb-6 flex items-center justify-center">
@@ -56,11 +85,23 @@
         </div>
          
           <div class="flex items-center justify-center">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-            type="submit"
-            @click="handleRegister()">
-                Register
-            </button>
+            <button 
+              v-if="formProperlyFilled"
+            
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+              type="submit"
+              @click="handleRegister()">
+                  Register
+              </button>
+            
+            <button 
+              v-else
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+              type="submit"
+              disabled>
+                  Register
+              </button>
+            
           </div>
       </form>
   </div>
@@ -82,6 +123,31 @@ const userService = new UserService(userData);
 const gender = ref(null);
 const country = ref(null);
 
+const formProperlyFilled = ref(false)
+
+const formValidate = () => {
+  // checks if the form is filled correctly
+  if (!userNameSatisfied.value || !firstNameSatisfied.value || !lastNameSatisfied.value ||
+       !passwordSatisfied.value || !passwordRepeatSatisfied.value){
+        formProperlyFilled.value = false;
+        // just some visibility. for some reason the password validation is not working as well as expected
+        if(!userNameSatisfied.value){console.log(`userName not satisfied with ${userName.value}`)}
+        if(!firstNameSatisfied.value){console.log(`firstName not satisfied with ${firstName.value}`)}
+        if(!lastNameSatisfied.value){console.log(`lastName not satisfied with ${lastName.value}`)}
+        if(!userNameSatisfied.value){console.log(`userName not satisfied with ${userName.value}`)}
+        if(!passwordSatisfied.value){console.log(`password not satisfied with ${password.value}`)}
+        if(!passwordRepeatSatisfied.value){console.log(`passwordRepeat not satisfied with ${passwordRepeat.value}`)}
+        
+
+  }
+  else if(password.value != passwordRepeat.value){ formProperlyFilled.value = false;}
+  else{
+  formProperlyFilled.value = true;
+  }
+  console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
+}
+
+
 provide("gender", gender)
 const genderRules = ref({requiredLength: 2,
                           name: "gender",
@@ -93,54 +159,61 @@ const genderRules = ref({requiredLength: 2,
 
 
 
-const firstName = ref(null);
-const firstNameRules = ref({requiredLength: 1,
+const firstName = ref("");
+const firstNameSatisfied = ref(false);
+const firstNameRules = ref({requiredLength: 3,
                         name: "firstName",
-                        isPassword: false,
-                        isEmail: false,
-                        });
-provide(firstNameRules.value.name, firstName);
+                        isRequired: true,
+                        setSatisfied : (v) => {firstNameSatisfied.value = v; formValidate()}
+                        })
+
+
 
 const lastName = ref("");
-const lastNameRules = ref({requiredLength: 1,
+const lastNameSatisfied = ref(false);
+const lastNameRules = ref({requiredLength: 2,
                         name: "lastName",
-                        isPassword: false,
-                        isEmail: false,
+                        isRequired: true,
+                        setSatisfied: (v) => {lastNameSatisfied.value = v; formValidate()}
                         });
-provide(lastNameRules.value.name, lastName);
+
+
 const email = ref("");
-const emailRules = ref({requiredLength: 5,
+const emailSatisfied = ref(false);
+const emailRules = ref({
                         name: "email",
-                        isPassword: false,
-                        isEmail: true
+                        isRequired: true,
+                        setSatisfied: (v) => {emailSatisfied.value = v; formValidate()}
                       });
-provide(emailRules.value.name, email);
+
 
 const userName = ref("");
+const userNameSatisfied = ref(false)
 const userNameRules = ref({requiredLength: 3,
                            name: "userName",
-                           isPassword: false,
-                           isEmail: false
+                           isRequired: true,
+                           setSatisfied: (v) => {userNameSatisfied.value = v; formValidate()}
                         });
-provide(userNameRules.value.name, userName);
+
 
 const password = ref("");
+const passwordSatisfied = ref(false);
 const passwordRules = ref({
                           requiredLength: 12,
                           name: "password",
-                          isPassword: true,
-                          isEmail: false
+                          isRequired: true,
+                          setSatisfied: (v) => {passwordSatisfied.value = v; formValidate()}
                         });
-provide(passwordRules.value.name, password);
 
 const passwordRepeat = ref("");
+const passwordRepeatSatisfied = ref(false)
 const passwordRepeatRules = ref({
                           requiredLength: 12,
-                          name: "passwordRepead",
-                          isPassword: true,
-                          isEmail: false
+                          name: "passwordRepeat",
+                          isRequired: true,
+                          setSatisfied: (v) => {passwordRepeatSatisfied.value = v; formValidate()}
                         });
-provide(passwordRepeatRules.value.name, passwordRepeat)
+
 
 const countryRules = ref({requiredLength: 2,
                             name: "country",
@@ -149,6 +222,8 @@ const countryRules = ref({requiredLength: 2,
   })
 
   provide(countryRules.value.name, country);
+
+
 
 const profilePicture = ref("");
 
@@ -166,20 +241,22 @@ const  dropSelf = async () => {
 const handleRegister = async () => {  
   try {
     // check register form input on client side
+    
+
+
     const body = {
-      username: validated(userName.value, userNameRules.value, false),
-      password: validated(password.value, passwordRules.value, false),
+      username: userName.value,
+      password: password.value,
       details: {
-        firstname: validated(firstName.value, firstNameRules.value, false),
-        lastname: validated(lastName.value, lastNameRules.value, false),
-        email: validated(email.value, emailRules.value, false),
-        salutation: validated(gender.value, genderRules.value, false),
-        country: validated(country.value, countryRules.value, false),
+        firstname: firstName.value,
+        lastname: lastName.value,
+        email: email.value,
+        salutation: gender.value,
+        country: country.value,
       },
     }
-    if(password.value!==passwordRepeat.value){
-      throw new Error("password does not equal password repeat");
-    }
+    console.log(body)
+
 
 
     // register new user
@@ -246,82 +323,58 @@ const login = async (body) => {
 
 const refreshForm = () => {
   firstName.value = "";
+  firstNameSatisfied.value = false;
   lastName.value = "";
+  lastNameSatisfied.value = false;
   email.value = "";
+  emailSatisfied.value = false;
   userName.value = "";
+  userNameSatisfied.value = false;
   password.value = "";
+  passwordSatisfied.value = false;
   passwordRepeat.value = "";
+  passwordRepeatSatisfied.value = false;
 }
 
-const validated = (val, requirement, ignoreNull) => {
-    if(ignoreNull){
-      if (isEmpty(val)){return null;}
-    }
-    
-    if (val?.length < requirement.requiredLength){throw new Error(`${requirement.name} is to short. min ${requirement.requiredLength} characters.`);}
-    if(requirement.isPassword){
-        if (!isStrongPassword(val)){
-          throw new Error(`${requirement.name} does not meet password requirements`);
+/*
+watch(
+  () => {
+          if (!userNameSatisfied.value || !firstNameSatisfied.value || !lastNameSatisfied.value ||
+              !passwordSatisfied.value || !passwordRepeatSatisfied.value){
+                formProperlyFilled.value = false;
+                console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
+                return;
+          }
+          else if (password.value != passwordRepeat.value){ 
+            formProperlyFilled.value = false; 
+            console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
+            return;
+          } else{
+          formProperlyFilled.value = true;
+          console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
+          return;
+          }    
         }
+)
+*/
 
-    }
-    if(requirement.isEmail){
-      if(!emailMet(val)){
-        throw new Error(`${requirement.name} is not a valid email address`);
-      }
-
-    }
-    return val;
-}
-const isStrongPassword = (val) => {
-
-// Check if the password includes at least one uppercase letter
-if (!/[A-Z]/.test(val)) {
-  return false;
-}
-
-// Check if the password includes at least one lowercase letter
-if (!/[a-z]/.test(val)) {
-  return false;
-}
-
-// Check if the password includes at least one number
-if (!/\d/.test(val)) {
-  return false;
-}
-
-// Check if the password includes at least one symbol
-if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\-]/.test(val)) {
-  return false;
-}
-
-// If all conditions are met, the password is strong
-return true;
-}
-const emailMet = (val)=> {
-        return String(val)
-        .toLowerCase()
-        .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-
-}
-  const isEmpty = (value) => {
-  return (value == null || (typeof value === "string" && value.trim().length === 0));
-}
 
 </script>
 
 <script>
 import GenderComponent from "./GenderComponent.vue";
 import CountrySelectComponent from "./CountrySelectComponent.vue";
-import TextInputComponent from "../TextInputComponent.vue";
+import TextInputComponent from "@/components/atoms/TextInputComponent.vue";
+import EmailInputComponent from "@/components/atoms/EmailInputComponent.vue";
+import PasswordInputComponent from "@/components/atoms/PasswordInputComponent.vue";
 export default {
   name: "RegisterComponent",
   components: {
       GenderComponent,
       CountrySelectComponent,
-      TextInputComponent
+      TextInputComponent,
+      EmailInputComponent,
+      PasswordInputComponent
     }
 }
 </script>

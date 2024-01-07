@@ -1,12 +1,15 @@
 <template>
   <NavbarComponent/>
-  <button @click="setPostModalDisplay()" v-if="crudEnabled">addRoom</button>
-  <MoviePostForm v-if="postModalDisplay" :display="postModalDisplay" />
+  <div v-if="!authorized"><UnauthComponent /></div>
+  <div v-else>
+    <button @click="setPostModalDisplay()" v-if="crudEnabled">addRoom</button>
+    <MoviePostForm v-if="postModalDisplay" :display="postModalDisplay" />
 
-  <h1>Rooms</h1>
-  <div v-if="loading" class="loading">Loading...</div>
-  <div v-for="room in movies"  v-bind:key="room.id">
-    <RoomComponent :name="room.name" :capacity="room.capacity" :cleaningMinutes="room.cleaningMinutes" />   
+    <h1>Rooms</h1>
+    <div v-if="loading" class="loading">Loading...</div>
+    <div v-for="room in movies"  v-bind:key="room.id">
+      <RoomComponent :name="room.name" :capacity="room.capacity" :cleaningMinutes="room.cleaningMinutes" />   
+    </div>
   </div>
   
 </template>
@@ -14,8 +17,13 @@
 <script setup>
 import {ref, provide, computed, onMounted} from "vue";
 import { useUserStore } from "@/store/userStore";
+import { sufficientRole } from "@/composables/roles";
+
 const userData = useUserStore();
 const roomApi = process.env.VUE_APP_API_ROOMS;
+
+// check if
+const authorized = computed(() => {return sufficientRole("ROLE_ADMIN", userData.role)});
 const rooms = ref([]);
 provide("rooms", rooms)
 const loading = ref(true);
@@ -25,7 +33,7 @@ const crudEnabled = computed(() =>getRoomCrudPermittion(userData.role));
 
 
 onMounted(async () => {
-  await getRooms();
+  authorized.value ? await getRooms() : null;
 })
 
 const getRooms = async () => {
@@ -62,6 +70,7 @@ const setPostModalDisplay = () => {
 </script>
 
 <script>
+import UnauthComponent from "@/components/error/UnauthComponent.vue";
 import NavbarComponent from "../components/navbar/NavbarComponent.vue";
 import RoomComponent from "../components/entities/RoomComponent.vue";
 //import MoviePostForm from "../components/forms/movies/MoviePostForm.vue";
