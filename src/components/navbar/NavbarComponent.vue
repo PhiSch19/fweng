@@ -3,7 +3,9 @@
     <nav class="pt-3.5 flex" >
 
       <router-link to="/profile" v-if="userRights">
-        <img src="../../assets/default_cover.jpg"  class="w-10 h-10 rounded-full mx-8" 
+        <img :src="profile_picture.img"  
+              :alt="profile_picture.alt"
+              class="w-10 h-10 rounded-full mx-8" 
         @click="userBtnClickHandler()"
         
         />
@@ -44,16 +46,17 @@
 import {provide, ref, computed} from "vue";
 import { useUserStore } from "@/store/userStore";
 import { sufficientRole } from "@/composables/roles";
-const userData = useUserStore();
+import {UserService} from "@/services/UserService";
 
-// role ri
+const userData = useUserStore();
+const userService = new UserService(userData);
+
+// role rights
 const adminRights = computed(() => {const res = sufficientRole("ROLE_ADMIN", userData.role); return res;});
-//console.log(`adminRights: ${adminRights.value}`);
-//const staffRights = computed(sufficientRole("ROLE_STAFF", userData.role));
 const userRights = computed(() => {const res = sufficientRole("ROLE_USER", userData.role); return res;});
+const profile_picture = computed(() => {return userService.getImageLink();});
 
 // state
-
 const registerShowState = ref(false);
 const loginShowState = ref(false);
 const showUserModel = ref(false);
@@ -116,6 +119,7 @@ const logout = () => {
 
 
 <script>
+//import RegisterComponent from "../forms/registration/RegisterComponent.vue";
 import RegisterComponent from "../forms/registration/RegisterComponent.vue";
 import LoginComponent from "../forms/login/LoginComponent.vue"
 import UpdateUserComponent from "../forms/UpdateUserComponent.vue"

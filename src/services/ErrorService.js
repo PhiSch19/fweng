@@ -1,0 +1,3 @@
+/*
+Handling the display of all types of errors
+*/

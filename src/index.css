@@ -41,3 +41,44 @@ nav a.router-link-exact-active {
         @apply btn;
     }
 }
+
+
+
+.layover {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 100%;
+    width: 100%;
+    background-color: grey;
+    opacity: 0.75;
+}
+.modal {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  /*height: 30rem;*/
+  width: 80%;
+  opacity: 1
+  /*border: black solid 2px;
+  border-radius: 5px;
+  background-color: white;
+  */
+}
+
+.inputError {
+    @apply
+    appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4  leading-tight
+}
+
+.inputOK {
+    @apply
+    appearance-none block w-full bg-gray-200 text-gray-700 border border-green-500 rounded py-3 px-4 mb-3 leading-tight
+}
+
+.inputUnchecked {
+    @apply
+    appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight
+}
+
+

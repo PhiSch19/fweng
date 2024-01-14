@@ -1,405 +1,254 @@
 <template>
-  <div class="layover" v-on:click="dropSelf()">
-  <h1>{{ display }}</h1></div>
-  <div class="modal">
-      <form  @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h5 class="align-top mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Register</h5>
-          <div class="relative w-full flex items-center justify-center">
-            <div class="w-1/3 relative mx-2">
-              
-              <TextInputComponent 
-                v-model:value="firstName"
-                :name="firstNameRules.name"
-                :isRequired="firstNameRules.isRequired"
-                :requiredLength="firstNameRules.requiredLength"
-                :setSatisfied="firstNameRules.setSatisfied"
-                />
-              
-            </div>
-            <div class="w-1/3 relative mx-2">
-              <TextInputComponent 
-                v-model:value="lastName"
-                v-model:satisfied="lastNameSatisfied"
-                :name="lastNameRules.name"
-                :isRequired="lastNameRules.isRequired"
-                :requiredLength="lastNameRules.requiredLength"
-                :setSatisfied="lastNameRules.setSatisfied"
-                />
-            </div>
-          </div>
-          <GenderComponent class="relative mb-6 flex items-center justify-center"/>
-         
-          <div class="relative mb-6 flex items-center justify-center">
-            <div class="w-1/3 relative mx-2">
-              <EmailInputComponent
-              v-model:value="email"
-              :name="emailRules.name"
-              :isRequired="emailRules.isRequired"
-              :setSatisfied="emailRules.setSatisfied"
-              />
-            </div>
-            <div class="w-1/3 relative mx-2">
-              
-              <TextInputComponent
-              v-model:value="userName"
-              :name="userNameRules.name"
-              :isRequired="userNameRules.isRequired"
-              :requiredLength="userNameRules.requiredLength"
-              :setSatisfied="userNameRules.setSatisfied"
-              />
-            </div>
+    <div class="layover" v-on:click="dropSelf()">
+        
+    </div>
+    <div>
+        <form  @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 modal">
+                <h1>{{ title }}</h1>
+                <div class="flex flex-wrap -mx-3 m-6">
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            First Name
+                        </label>
+                        <input 
+                            :class="firstNameStyle"
+                            v-model="form.firstName.$value"
+                            >
+                        <p  v-if="form.firstName.$error" class="text-red-500 text-xs italic">{{ form.firstName.$error.message }}</p>
 
-          </div>
-          <div class="relative mb-6">
-            <CountrySelectComponent />
-          </div>
+ 
+                    </div>
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            Last Name
+                        </label>
+                        <input
+                            :class="lastNameStyle"
+                            v-model="form.lastName.$value"
+                            >
+                        <p  v-if="form.lastName.$error" class="text-red-500 text-xs italic">{{ form.lastName.$error.message }}</p>
+                         
+                    </div>
+                    
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            email
+                        </label>
+                        <input
+                            :class="emailStyle"
+                            v-model="form.email.$value"
+                            >
+                        <p  v-if="form.email.$error" class="text-red-500 text-xs italic">{{ form.email.$error.message }}</p>
 
-          <div class="relative mb-6 flex items-center justify-center">
-            <div class="w-1/3 relative mx-2">
-              
-              <PasswordInputComponent
-              v-model:value="password"
-              :name="passwordRules.name"
-              :isRequired="passwordRules.isRequired"
-              :requiredLength="passwordRules.requiredLength"
-              :setSatisfied="passwordRules.setSatisfied" />
-            </div>
-            <div class="w-1/3 relative mx-2">
-              
-              <PasswordInputComponent
-              v-model:value="passwordRepeat"
-              :name="passwordRepeatRules.name"
-              :isRequired="passwordRepeatRules.isRequired"
-              :requiredLength="passwordRepeatRules.requiredLength"
-              :setSatisfied="passwordRepeatRules.setSatisfied" />
-            </div>
-          </div>
-        <div class="relative mb-6 flex items-center justify-center">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="profilePicture">
-            Profile Picture
-          </label>
-          <input class="shadow appearance-none border rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                 id="profilePicture" type="file"
-                 @change="onProfilePictureSelected"
-          />
-        </div>
-         
-          <div class="flex items-center justify-center">
-            <button 
-              v-if="formProperlyFilled"
+ 
+                    </div>
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            user Name
+                        </label>
+                        <input 
+                            :class="userNameStyle"
+                            v-model="form.userName.$value"
+                            >
+                        <p  v-if="form.userName.$error" class="text-red-500 text-xs italic">{{ form.userName.$error.message }}</p>
+                                    
+                    </div>
+
+                    <div class="w-full px-3 mb-6 md:mb-0">
+                        <GenderComponent v-model="form.gender.$value" />
+
+                    </div>
+
+                    <div class="w-full px-3 mb-6 md:mb-0">
+
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            Country
+                        </label>
+                        <CountrySelectComponent 
+                    v-model="form.country.$value"/>
+                    </div>
+
+                    <div class="w-full px-3 mb-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" for="grid-first-name">
+                            Profile Picture
+                        </label>
+                        <input :class="inputStyleUnchecked"
+                            id="profilePicture" type="file"
+                            @change="onProfilePictureSelected"
+                    />
+
+                    </div>
+
+
+                    <div class="w-full md:w-1/2 px-3 mb-6 mt-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            Password
+                        </label>
+                        <input 
+                            :class="passwordStyle"
+                            v-model="form.password.$value"
+                            type="password"
+                            >
+                        <p  v-if="form.password.$error" class="text-red-500 text-xs italic">{{ form.password.$error.message }}</p>
+                      
+                    </div>
+
+                    <div class="w-full md:w-1/2 px-3 mb-6 mt-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            Confirm Password
+                        </label>
+                        <input
+                            :class="password2Style"
+                            v-model="form.password2.$value"
+                            type="password"
+                            >
+                        <p  v-if="form.password2.$error" class="text-red-500 text-xs italic">{{ form.password2.$error.message }}</p>
+ 
+                    </div>
             
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-              type="submit"
-              @click="handleRegister()">
-                  Register
-              </button>
-            
-            <button 
-              v-else
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-              type="submit"
-              disabled>
-                  Register
-              </button>
-            
-          </div>
-      </form>
-  </div>
+                    <button type="submit" @click="register()">submit</button>
+                </div>
+            </form>
+    </div>
+
+    
+
+
 </template>
 
 <script setup>
-import {inject, provide, ref} from "vue";
+import {inject, ref, computed} from "vue";
+import { passwordValidator } from "@/composables/validators";
+//import { defineForm, field } from "vue-yup-form";
+import * as yup from "yup";
+import { defineForm, field, isValidForm } from "vue-yup-form";
 import { useUserStore } from "@/store/userStore";
 import {UserService} from "@/services/UserService";
-//import { object, string, number, date, InferType } from 'yup';
-const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
-const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
-const apiUserUrl = process.env.VUE_APP_API_USER;
 
-const showComp = inject("showRegisterComponent")
-const errorHandler = inject("errors");
+//const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
+//const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
+//const apiUserUrl = process.env.VUE_APP_API_USER;
 const userData = useUserStore();
 const userService = new UserService(userData);
-const gender = ref(null);
-const country = ref(null);
-
-const formProperlyFilled = ref(false)
-
-const formValidate = () => {
-  // checks if the form is filled correctly
-  if (!userNameSatisfied.value || !firstNameSatisfied.value || !lastNameSatisfied.value ||
-       !passwordSatisfied.value || !passwordRepeatSatisfied.value){
-        formProperlyFilled.value = false;
-        // just some visibility. for some reason the password validation is not working as well as expected
-        if(!userNameSatisfied.value){console.log(`userName not satisfied with ${userName.value}`)}
-        if(!firstNameSatisfied.value){console.log(`firstName not satisfied with ${firstName.value}`)}
-        if(!lastNameSatisfied.value){console.log(`lastName not satisfied with ${lastName.value}`)}
-        if(!userNameSatisfied.value){console.log(`userName not satisfied with ${userName.value}`)}
-        if(!passwordSatisfied.value){console.log(`password not satisfied with ${password.value}`)}
-        if(!passwordRepeatSatisfied.value){console.log(`passwordRepeat not satisfied with ${passwordRepeat.value}`)}
-        
-
-  }
-  else if(password.value != passwordRepeat.value){ formProperlyFilled.value = false;}
-  else{
-  formProperlyFilled.value = true;
-  }
-  console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
-}
-
-
-provide("gender", gender)
-const genderRules = ref({requiredLength: 2,
-                          name: "gender",
-                          isPassword: false,
-                          isEmail: false
-  
-  })
-  provide(genderRules.value.name, gender)
-
-
-
-const firstName = ref("");
-const firstNameSatisfied = ref(false);
-const firstNameRules = ref({requiredLength: 3,
-                        name: "firstName",
-                        isRequired: true,
-                        setSatisfied : (v) => {firstNameSatisfied.value = v; formValidate()}
-                        })
-
-
-
-const lastName = ref("");
-const lastNameSatisfied = ref(false);
-const lastNameRules = ref({requiredLength: 2,
-                        name: "lastName",
-                        isRequired: true,
-                        setSatisfied: (v) => {lastNameSatisfied.value = v; formValidate()}
-                        });
-
-
-const email = ref("");
-const emailSatisfied = ref(false);
-const emailRules = ref({
-                        name: "email",
-                        isRequired: true,
-                        setSatisfied: (v) => {emailSatisfied.value = v; formValidate()}
-                      });
-
-
-const userName = ref("");
-const userNameSatisfied = ref(false)
-const userNameRules = ref({requiredLength: 3,
-                           name: "userName",
-                           isRequired: true,
-                           setSatisfied: (v) => {userNameSatisfied.value = v; formValidate()}
-                        });
-
-
-const password = ref("");
-const passwordSatisfied = ref(false);
-const passwordRules = ref({
-                          requiredLength: 12,
-                          name: "password",
-                          isRequired: true,
-                          setSatisfied: (v) => {passwordSatisfied.value = v; formValidate()}
-                        });
-
-const passwordRepeat = ref("");
-const passwordRepeatSatisfied = ref(false)
-const passwordRepeatRules = ref({
-                          requiredLength: 12,
-                          name: "passwordRepeat",
-                          isRequired: true,
-                          setSatisfied: (v) => {passwordRepeatSatisfied.value = v; formValidate()}
-                        });
-
-
-const countryRules = ref({requiredLength: 2,
-                            name: "country",
-                            isPassword: false,
-                            isEmail: false
-  })
-
-  provide(countryRules.value.name, country);
-
-
 
 const profilePicture = ref("");
+
+const generateForm = () => {
+    /*as we need cross validation we first define the fields*/
+
+    const passwordLabel = "password";
+    const firstName = field("", yup.string().required());
+    const lastName = field("", yup.string().required());
+    const email = field("", yup.string().email().required());
+    const userName = field("", yup.string().required());
+    const gender =  field(null, yup.string().nullable());
+    const country = field(null, yup.string().nullable());
+    const password = field("", yup.string().required().test({
+        test(value, ctx){
+            const valid = passwordValidator(value, 12);
+            if(!valid){
+                return ctx.createError({message: "Password requirements not met"})
+            }
+            return true;
+        }
+    }));
+    const password2= field("", () => 
+        yup.string()
+        .required()
+        .oneOf([password.$value], ({passwordLabel}) => `Must match password`)
+    );
+
+
+    return defineForm({
+        firstName,
+        lastName,
+        email,
+        userName,
+        gender,
+        country,
+        password,
+        password2
+    })
+
+}
+
+const inputStyleError = "inputError focus:outline-none focus:bg-white"
+const inputStyleOk = "inputOK focus:outline-none focus:bg-white"
+const inputStyleUnchecked = ref("inputUnchecked focus:outline-none focus:bg-white");
+const firstNameStyle= computed(() => {if(form.firstName.$error){ return inputStyleError;} return inputStyleOk;});
+const lastNameStyle = computed(() => {if(form.lastName.$error){ return inputStyleError;} return inputStyleOk;});
+const emailStyle = computed(() => {if(form.email.$error){ return inputStyleError;} return inputStyleOk;});
+const userNameStyle = computed(() => {if(form.userName.$error){return inputStyleError;} return inputStyleOk;});
+const passwordStyle = computed(() => {if(form.password.$error){ return inputStyleError;} return inputStyleOk;});
+const password2Style = computed(() => {if(form.password2.$error){ return inputStyleError;} return inputStyleOk;});
+
+
+const form = generateForm();
+const showComp = inject("showRegisterComponent");
+const title =ref("Register");
+
+
+form.firstName.$error; // ValidationError: this is a required field
+form.firstName.$value;
+form.lastName.$error; // ValidationError: this is a required field
+form.userName.$error; // ValidationError: this is a required field
+form.email.$error;
+form.gender.$error;
+form.country.$error;
+form.password.$error;
+form.password2.$error;
+
 
 const onProfilePictureSelected = (e) => {
   profilePicture.value = e.target.files[0]
 }
 
 
+
 const  dropSelf = async () => {
-        refreshForm();
+        //refreshForm();
         showComp.value = false;
     }
 
 
-const handleRegister = async () => {  
-  try {
-    // check register form input on client side
+const register = async () => {
     
-
-
-    const body = {
-      username: userName.value,
-      password: password.value,
-      details: {
-        firstname: firstName.value,
-        lastname: lastName.value,
-        email: email.value,
-        salutation: gender.value,
-        country: country.value,
-      },
-    }
-    console.log(body)
-
-
-
-    // register new user
-    const registered = await register(body);
-    refreshForm();
-    showComp.value = false;
-
-
-  } catch (e) {
-    errorHandler(e);
-  }
-
-
-}
-
-const register = async (body) => {
-  const response = await fetch(apiRegisterUrl, {
-    method: "POST",
-    headers: {"content-type": "application/json",},
-    body: JSON.stringify(body)
-  })
-  if (response.status !== 200) {
-    throw new Error("Could not register this user. Please try again");
-  }
-  const jsonResponse = await response.json();
-  await login(body);
-  uploadProfilePicture(jsonResponse.id);
-
-  return true;  
-
-}
-
-const uploadProfilePicture = async (id) => {
-
-  const body = new FormData();
-  body.append('file', profilePicture.value);
-
-  const url = apiUserUrl + "/" + id + "/profile-picture"
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {"Authorization": userData.getToken(),},
-    body: body
-  });
-  if (response.status !== 200) {
-    throw new Error("Could not upload profile picture.");
-  }
-
-}
-
-const login = async (body) => {
-  const response = await fetch(apiAuthenticateUrl, {
-    method: "POST",
-    headers: {"content-type": "application/json",},
-    body: JSON.stringify(body)
-  })
-  if (response.status !== 200) {
-    throw new Error("Could not authenticate.");
-  }
-  const json_response = await response.json();
-  userData.setToken(json_response);
-  await userService.fillStoreFromApi();
-}
-
-const refreshForm = () => {
-  firstName.value = "";
-  firstNameSatisfied.value = false;
-  lastName.value = "";
-  lastNameSatisfied.value = false;
-  email.value = "";
-  emailSatisfied.value = false;
-  userName.value = "";
-  userNameSatisfied.value = false;
-  password.value = "";
-  passwordSatisfied.value = false;
-  passwordRepeat.value = "";
-  passwordRepeatSatisfied.value = false;
-}
-
-/*
-watch(
-  () => {
-          if (!userNameSatisfied.value || !firstNameSatisfied.value || !lastNameSatisfied.value ||
-              !passwordSatisfied.value || !passwordRepeatSatisfied.value){
-                formProperlyFilled.value = false;
-                console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
-                return;
-          }
-          else if (password.value != passwordRepeat.value){ 
-            formProperlyFilled.value = false; 
-            console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
-            return;
-          } else{
-          formProperlyFilled.value = true;
-          console.log(`formProperlyFilled: ${formProperlyFilled.value}`)
-          return;
-          }    
+    try{ 
+        if(!isValidForm(form)){
+            throw new Error(form.$error.message)
         }
-)
-*/
-
+        const body = {
+                    username: form.userName.$value,
+                    password: form.password.$value,
+                    details: {
+                        firstname: form.firstName.$value,
+                        lastname: form.lastName.$value,
+                        email: form.email.$value,
+                        salutation: form.gender.$value,
+                        country: form.country.$value,
+                    },
+        };
+        await userService.register(body, profilePicture.value);
+        showComp.value = false;
+    }catch(e){
+        alert(e)
+    }
+}
 
 </script>
 
 <script>
 import GenderComponent from "./GenderComponent.vue";
 import CountrySelectComponent from "./CountrySelectComponent.vue";
-import TextInputComponent from "@/components/atoms/TextInputComponent.vue";
-import EmailInputComponent from "@/components/atoms/EmailInputComponent.vue";
-import PasswordInputComponent from "@/components/atoms/PasswordInputComponent.vue";
+
 export default {
-  name: "RegisterComponent",
-  components: {
+    name: "RegisterComponent",
+    components: {
       GenderComponent,
       CountrySelectComponent,
-      TextInputComponent,
-      EmailInputComponent,
-      PasswordInputComponent
-    }
+     }
 }
 </script>
 
-<style scoped>
-.layover {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    height: 100%;
-    width: 100%;
-    background-color: grey;
-    opacity: 0.75;
-}
-.modal {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  height: 30rem;
-  width: 80%;
-  opacity: 1
-  /*border: black solid 2px;
-  border-radius: 5px;
-  background-color: white;
-  */
-}
-
-</style>

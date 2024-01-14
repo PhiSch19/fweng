@@ -26,7 +26,7 @@ onMounted(async () => {
 
 const loadCountries = async () => {
 
-    const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flag");
+    const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flag,cca2");
     if ( response.status == 200 ){
         const rawCountries = await response.json();
         sortCountries(rawCountries);
