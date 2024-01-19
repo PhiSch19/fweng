@@ -40,7 +40,6 @@
 </template>
 
 
-
 <script setup>
 /* component state management. Frontend only reacts to state variables marked via ref */
 import {provide, ref, computed} from "vue";
@@ -115,8 +114,6 @@ const logout = () => {
 }
 
 </script>
-
-
 
 <script>
 //import RegisterComponent from "../forms/registration/RegisterComponent.vue";
