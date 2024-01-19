@@ -82,3 +82,18 @@ nav a.router-link-exact-active {
 }
 
 
+.profilePictureBig {
+    max-height: 25%;
+    width: auto;
+    border-radius: 9999px;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+
+
+
+
+
+}
+
+

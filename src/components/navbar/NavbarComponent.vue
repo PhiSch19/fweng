@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 gap-4 pt-2 pb-2">
     <nav class="pt-3.5 flex" >
 
-      <router-link to="/profile" v-if="userRights">
+      <router-link :to="userProfileLink" v-if="userRights">
         <img :src="profile_picture.img"  
               :alt="profile_picture.alt"
               class="w-10 h-10 rounded-full mx-8" 
@@ -49,6 +49,7 @@ import {UserService} from "@/services/UserService";
 
 const userData = useUserStore();
 const userService = new UserService(userData);
+const userProfileLink = computed(() => {if(userData.userId.length > 3) return `/profile/${userData.userId}`; return "/"});
 
 // role rights
 const adminRights = computed(() => {const res = sufficientRole("ROLE_ADMIN", userData.role); return res;});

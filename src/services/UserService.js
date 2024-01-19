@@ -49,16 +49,9 @@ export class UserService {
 
     async register(user, image){
 
-        /*
-        const response = await fetch(apiRegisterUrl, {
-              method: "POST",
-              headers: {"content-type": "application/json",},
-              body: JSON.stringify(user)
-            })
-        */
         const response = await this.$backend.post("/user/register", user, {
             headers: {"content-type": "application/json",},
-            //body: JSON.stringify(user)
+
         })
         
         
@@ -99,14 +92,7 @@ export class UserService {
     async updateProfilePicture(userId, image){
         const file = new FormData();
         file.append('file', image);
-        /*
-        const url = "/user/" + userId + "/profile-picture"
-        const response = await fetch(url, {
-        method: "POST",
-        headers: {"Authorization": this.$userStore.getToken(),},
-        body: body
-        });
-        */
+ 
         const response = await this.$backend.post("/user/" + userId + "/profile-picture", file, {
             headers: {"Authorization": this.$userStore.getToken(),},
         })
@@ -132,4 +118,50 @@ export class UserService {
         return profile
 
             }
+
+
+    async getById(userId){
+        const response = await this.$backend.get(`/user/${userId}/details`, {
+            headers: {"Authorization": this.$userStore.getToken(),},
+        })
+
+        if (response.status === 200) {
+            return response.data   
+        }
+
+        else if (response.status === 401 || response.status === 403) {
+            throw new Error("You are not authorized to see other users.");
+
+        }
+
+        else {
+            throw new Error("Something went wrong");
+        }
+
+
+
+
+
+
+    }
+
+    getProfileImage(profilePictureId){
+
+        const backend_url = "http://localhost:8081"
+        const profile = {}
+        
+        if(this.$userStore.profilePictureId){
+            profile.img = `${backend_url}/file/${profilePictureId}/download`
+            profile.alt = `a profile image`
+        }else{
+            profile.img = require("@/assets/default_cover.jpg");
+            profile.alt = `placeholder profile image as the user did not provide an image`
+        }
+        return profile
+    }
+
+
+
+
+    
 }

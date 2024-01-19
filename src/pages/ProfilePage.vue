@@ -3,12 +3,13 @@
     <div v-if="!authorized" ><UnauthComponent /></div>
     <div v-else>
       <h1>Profile <button @click="userBtnClickHandler()">update</button></h1>
+      
       <div>
         <div class="flex">
           <div>
             <img :src="profile_picture.img"  
                 :alt="profile_picture.alt"
-                class="w-30 h-30 rounded-full mx-8" 
+                class="profilePictureBig" 
             />
             <div>role: {{ userData.role }}</div>
  
@@ -79,6 +80,7 @@
       <UpdateUserComponent v-if="showUserModel" class="modal" />
     </div>
     </div>
+    <UserPatchComponent />
   </template>
   
   <script setup>
@@ -121,6 +123,7 @@
   import UnauthComponent from "@/components/error/UnauthComponent.vue";
   import NavbarComponent from "../components/navbar/NavbarComponent.vue";
   import UpdateUserComponent from "../components/forms/UpdateUserComponent.vue";
+  import UserPatchComponent from "@/components/UserDetails/UserPatchComponent.vue";
   
   
   export default {
@@ -129,6 +132,7 @@
       NavbarComponent,
       UpdateUserComponent,
       UnauthComponent,
+      UserPatchComponent
   
     }
   }

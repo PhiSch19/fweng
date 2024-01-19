@@ -6,7 +6,7 @@
     
     >
         <option v-for="(country, index) in countries" v-bind:key="index"
-            :value="country.name.common"
+            :value="country.cca2"
         >{{ country.flag }} {{ country.name.common }}</option>
     </select>
 
@@ -29,7 +29,10 @@ const loadCountries = async () => {
     const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flag,cca2");
     if ( response.status == 200 ){
         const rawCountries = await response.json();
+        console.log(rawCountries)
+
         sortCountries(rawCountries);
+        console.log(rawCountries)
         countries.value = rawCountries;
     }
 }
