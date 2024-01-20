@@ -1,12 +1,34 @@
 <template>
-     <img :src="profile_picture.img"  
-                :alt="profile_picture.alt"
+     <img :src="profilePicture.img"  
+                :alt="profilePicture.alt"
                 class="w-30 h-30 rounded-full mx-8" 
             />
-            <div>role: {{ userData.role }}</div>
-
-
 </template>
+
+
+<script setup>
+import { computed, defineModel } from 'vue';
+import { UserService } from '@/services/UserService';
+
+
+const userService = new UserService(null, null);
+
+
+const profilePictureId = defineModel();
+
+const profilePicture = computed(() => {
+    return userService.getProfileImage(profilePictureId.value)
+})
+
+
+
+
+
+
+
+
+</script>
+
 
 
 <script>

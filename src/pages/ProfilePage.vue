@@ -2,8 +2,8 @@
     <NavbarComponent/>
     <div v-if="!authorized" ><UnauthComponent /></div>
     <div v-else>
-      <h1>Profile <button @click="userBtnClickHandler()">update</button></h1>
-      
+      <h1>Profile</h1>
+      <!--
       <div>
         <div class="flex">
           <div>
@@ -19,38 +19,7 @@
            
           
           </div>
-          <!--TABLE APPROACH-->
-          <!--
-          <table>
-            <tr>
-              <td class="block uppercase tracking-wide text-gray-700 text-l mt-2 font-bold ">firstName</td><td>{{ userData.firstName }}</td><td><button type="submit">update</button></td>
-            </tr>
 
-            <tr>
-              <td>lastName</td><td>{{ userData.lastName }}</td><td><button type="submit">update</button></td>
-            </tr>
-            <tr>
-              <td>email</td><td>{{ userData.email }}</td><td><button type="submit">update</button></td>
-            </tr>
-            <tr>
-              <td>userName</td><td>{{ userData.username}}</td><td><button type="submit">update</button></td>
-            </tr>
-            <tr>
-              <td>salutation</td><td>{{ userData.gender }}</td><td><button type="submit">update</button></td>
-            </tr>
-            <tr>
-            <td>country</td><td>{{ userData.country }}</td><td><button type="submit">update</button></td>
-            </tr>
-            <tr v-if="isAdmin">
-              <td>role</td><td>{{ userData.role }}</td><td><button type="submit">update</button></td>
-            
-            </tr>
-
-
-          </table>
-          -->
-
-          <!--FORM APPROACH-->
           <div>
           <form class="flex-row">
             <label>firstName: </label>
@@ -76,39 +45,32 @@
 
 
       </div>
-      
-      <UpdateUserComponent v-if="showUserModel" class="modal" />
+      -->
+    
+      <UserPatchComponent />
+
     </div>
-    </div>
-    <UserPatchComponent />
+
+    
   </template>
   
   <script setup>
   import {ref, computed, provide} from "vue";
+  import { useRoute } from 'vue-router'
   import { useUserStore } from "@/store/userStore";
   import { sufficientRole } from "@/composables/roles";
-  import { UserService } from "@/services/UserService";
   // this .env stuff is not working. I have no Idea why. sucks...
   
-  
+  const route = useRoute();
   const userData = useUserStore();
-  const userService = new UserService(userData);
-  const authorized = computed(() => {return sufficientRole("ROLE_USER", userData.role)});
-  const isAdmin = computed(() => {return sufficientRole("ROLE_ADMIN", userData.role)});
-  const profile_picture = computed(() => {return userService.getImageLink();});
+  const authorized = computed(() =>{if (sufficientRole("ROLE_ADMIN", userData.role) || userData.role === route.params.userId){return true;} return false; })
+ 
 
 
 
   const showUserModel = ref(false);
   provide("showUserComponent", showUserModel);
-  const userBtnClickHandler = () => {
-  console.log("clicked")
-  if (showUserModel.value) {
-    showUserModel.value = false;
-  } else {
-    showUserModel.value = true;
-  }
-}
+  
 
 
 
@@ -122,7 +84,6 @@
   <script>
   import UnauthComponent from "@/components/error/UnauthComponent.vue";
   import NavbarComponent from "../components/navbar/NavbarComponent.vue";
-  import UpdateUserComponent from "../components/forms/UpdateUserComponent.vue";
   import UserPatchComponent from "@/components/UserDetails/UserPatchComponent.vue";
   
   
@@ -130,7 +91,6 @@
     name: 'ProfilePage',
     components: {
       NavbarComponent,
-      UpdateUserComponent,
       UnauthComponent,
       UserPatchComponent
   

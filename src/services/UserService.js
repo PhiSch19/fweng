@@ -4,9 +4,10 @@ export class UserService {
 
     $userStore;
 
-    constructor(userStore) {
+    constructor(userStore, errorStore) {
         this.$userStore = userStore;
         this.$backend = instance;
+        this.$errorStore = errorStore;
     }
 
     async fillStoreFromApi() {
@@ -117,7 +118,9 @@ export class UserService {
         }
         return profile
 
-            }
+    }
+
+
 
 
     async getById(userId){
@@ -150,7 +153,7 @@ export class UserService {
         const backend_url = "http://localhost:8081"
         const profile = {}
         
-        if(this.$userStore.profilePictureId){
+        if(profilePictureId){
             profile.img = `${backend_url}/file/${profilePictureId}/download`
             profile.alt = `a profile image`
         }else{
@@ -159,6 +162,33 @@ export class UserService {
         }
         return profile
     }
+
+
+    async patchUser(userId, userObject){
+        const patchBody =  {};
+        // need to map the userBojet to the required keys for the patch body
+        userObject.lastName ? patchBody.lastname = userObject.lastName : null;
+        userObject.firstName ? patchBody.firstname = userObject.firstName : null;
+        userObject.userName ? patchBody.username = userObject.userName : null;
+        userObject.gender ? patchBody.salutation = userObject.gender : null;
+        userObject.country ? patchBody.country = userObject.country : null;
+        userObject.role ? patchBody.role = userObject.role : null;
+        userObject.password ? patchBody.password = userObject.password : null;
+        try{
+            const response = await this.$backend.patch("/user/" + userId + "/details", patchBody, {
+                headers: {"Authorization": this.$userStore.getToken(),},
+            })
+            if (response.status !== 200) {
+                throw new Error("Could not upload profile picture.");
+            }
+            console.log(response.data)
+
+        }catch (e){
+            this.$errorStore.setError(e)
+
+        }
+    }
+
 
 
 
