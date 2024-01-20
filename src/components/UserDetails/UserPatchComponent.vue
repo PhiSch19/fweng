@@ -1,6 +1,6 @@
 <template>
     <div class="flex">
-        <UserImageComponent v-mode="user.profilePictureId" />
+        <UserImageComponent v-model="user.profilePictureId" />
         <form  @submit.prevent="submitForm">
             <table>
                 <tr>

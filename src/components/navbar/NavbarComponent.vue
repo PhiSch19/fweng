@@ -22,6 +22,7 @@
       <router-link to="/help" class="mx-4"> Help</router-link>
       
       <router-link to="/imprint" class="mx-4"> Imprint</router-link>
+      <router-link to="/profiles" v-if="adminRights" class="mx-4">Profiles</router-link>
     </nav>
     <div class="pt-2">
       <button class="btn-blue" v-if="!userRights" @click="registerBtnClickHandler()">register</button>

@@ -120,9 +120,6 @@ export class UserService {
 
     }
 
-
-
-
     async getById(userId){
         const response = await this.$backend.get(`/user/${userId}/details`, {
             headers: {"Authorization": this.$userStore.getToken(),},
@@ -163,7 +160,6 @@ export class UserService {
         return profile
     }
 
-
     async patchUser(userId, userObject){
         const patchBody =  {};
         // need to map the userBojet to the required keys for the patch body
@@ -182,6 +178,10 @@ export class UserService {
                 throw new Error("Could not upload profile picture.");
             }
             console.log(response.data)
+            if ( patchBody.role ){
+                await this.updateRole(userId, patchBody.role);
+            }
+
 
         }catch (e){
             this.$errorStore.setError(e)
@@ -189,6 +189,46 @@ export class UserService {
         }
     }
 
+    async updateRole(userId, role){
+        console.log(role)
+        try{
+            const response = await this.$backend.post("/user/" + userId + "/role", role, {
+                headers: {"Authorization": this.$userStore.getToken(),
+                          "Content-Type": "text/plain"
+            
+                        },
+            })
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error(`Role could not be changed. status ${response.status}`);
+            }
+        }catch (e){
+            this.$errorStore.setError(e)
+
+        }
+    }
+
+    async getUsers(){
+        try{
+            const response = await this.$backend.get("/user", {
+                headers: {"Authorization": this.$userStore.getToken(),},
+            })
+            if (response.status !== 200) {
+                throw new Error("Could not upload profile picture.");
+            }
+
+            return response.data;
+
+        }catch (e){
+            this.$errorStore.setError(e)
+            return null;
+
+        }
+
+
+
+
+
+    }
 
 
 

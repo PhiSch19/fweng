@@ -5,6 +5,7 @@ import HelpPage from '../pages/HelpPage.vue'
 import MoviesPage from '../pages/MoviesPage.vue'
 import RoomsPage from '../pages/RoomsPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
+import ProfilesPage from "@/pages/ProfilesPage.vue"
 
 const routes = [
     {
@@ -39,6 +40,12 @@ const routes = [
         path: '/imprint',
         name: 'imprint',
         component: ImprintPage
+    },
+    {
+
+        path: "/profiles",
+        name: "profiles",
+        component: ProfilesPage
     },
 
     {

@@ -1,7 +1,7 @@
 <template>
      <img :src="profilePicture.img"  
                 :alt="profilePicture.alt"
-                class="w-30 h-30 rounded-full mx-8" 
+                class="profilePictureBig" 
             />
 </template>
 
