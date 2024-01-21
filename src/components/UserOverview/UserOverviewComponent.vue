@@ -1,22 +1,49 @@
 <template>
 
     <input v-model="filter"
-    @input="filered()"
-    placeholder="filter"
-    
+    @input="rehydrate()"
+    placeholder="Search"
+    class="fullPageTable mb-2 mt-2"
     />
-    <table>
+    <table class="fullPageTable">
         <thead>
-            <tr><th>UserName</th><th>FirstName</th><th>LastName</th><th>Link</th></tr>
+            <tr><th>Active</th><th>Role</th><th>UserName</th><th>Email</th><th>Gender</th>
+                <th>FirstName</th><th>LastName</th><th>Link</th><th>Actions</th>
+            
+            </tr>
         </thead>
         <tr v-for="user, index in users" :key="index">
+        <td><span v-if="user.active===true" class="greenDot"
+            alt="user is active"
+            ></span>
+            <span v-else class="orangeDot"
+                alt="user in deactivated"
+            ></span></td>
+        <td>{{ user.role }}</td>
         <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.salutation }}</td>
         <td>{{ user.firstname }}</td>
         <td>{{ user.lastname }}</td>
+        
         <td>
             <router-link  :to="'/profile/' + user.id">
                 <button>details</button>
             </router-link>
+        </td>
+        <td>
+            <button v-if="user.active === true" @click="toggleActive(user.id)"
+                >deactivate</button>
+            <button  v-else @click="toggleActive(user.id)"
+            >activate</button>
+            
+        </td>
+        <td>
+            <button class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+            @click="deleteUser(user.id)"
+            >
+                delete
+            </button> 
         </td>
         
         
@@ -40,14 +67,7 @@ const errorStore = useErrorStore();
 const userService = new UserService(userData, errorStore);
 const filter = ref("");
 const users = ref([]);
-/*
-const displayedUsers = computed(() => {
-        return users.value.filter((item) => {
-            console.log(item)
-            return customFilter(item);
-        })
-})
-*/
+
 
 onMounted(async () => {
 
@@ -57,28 +77,10 @@ onMounted(async () => {
         return item.details;
     })
 
-    /*
-
-    for(let i=0; _users.length < i; i++) {
-        const details = _users[i]["details"];
-        const token_list = [details.username, details.firstname, details.lastname,
-                            details.country, details.role, details.salutation
-                            ].filter((e) => {
-                                if (e){
-                                    return e.toLowerCase();
-                                }
-                            })
-        details["token_list"] = token_list;
-        users.value.push(details);
-        
-    }
-    console.log(users.value)
-    */
 })
 
 
-
-const filered = async () => {
+const rehydrate = async () => {
     const filter_container = [];
     const _users = await userService.getUsers();
     for(let i=0; i < _users.length; i++){
@@ -87,12 +89,28 @@ const filered = async () => {
         }
     }
     users.value = filter_container;
-
-
-
-
-
 }
+
+const toggleActive = async (userId) => {
+    // adjust user state and rehydrate table
+    try{
+        await userService.toggleActive(userId);
+        await rehydrate();
+    } catch (e) {
+        errorStore.error = e;
+    }
+}
+
+const deleteUser = async(userId) => {
+        // adjust user state and rehydrate table
+        try{
+        await userService.deleteUser(userId);
+        await rehydrate();
+    } catch (e) {
+        errorStore.error = e;
+    }
+}
+
 
 
 

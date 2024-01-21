@@ -63,27 +63,16 @@
   
   const route = useRoute();
   const userData = useUserStore();
-  const authorized = computed(() =>{if (sufficientRole("ROLE_ADMIN", userData.role) || userData.role === route.params.userId){return true;} return false; })
+  const authorized = computed(() =>{if (sufficientRole("ROLE_ADMIN", userData.role) || userData.userId === route.params.userId){return true;} return false; })
  
-
-
-
   const showUserModel = ref(false);
   provide("showUserComponent", showUserModel);
+   
+</script>
   
-
-
-
-  /*
-  username = ref(useUserStore.username);
-  role = ref(useUserStore.role);
-  */
-  
-  </script>
-  
-  <script>
+<script>
   import UnauthComponent from "@/components/error/UnauthComponent.vue";
-  import NavbarComponent from "../components/navbar/NavbarComponent.vue";
+  import NavbarComponent from "@/components/navbar/NavbarComponent.vue";
   import UserPatchComponent from "@/components/UserDetails/UserPatchComponent.vue";
   
   
@@ -96,5 +85,5 @@
   
     }
   }
-  </script>
+</script>
   

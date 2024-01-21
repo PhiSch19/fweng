@@ -7,7 +7,7 @@
 
 
 <script setup>
-import { computed, defineModel } from 'vue';
+import { computed, defineModel} from 'vue';
 import { UserService } from '@/services/UserService';
 
 
@@ -34,6 +34,7 @@ const profilePicture = computed(() => {
 <script>
 
 export default {
-    name: "UserImageComponent"
+    name: "UserImageComponent",
+    
 }
 </script>

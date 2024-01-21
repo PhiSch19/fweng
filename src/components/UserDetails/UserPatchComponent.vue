@@ -1,8 +1,19 @@
 <template>
     <div class="flex">
-        <UserImageComponent v-model="user.profilePictureId" />
+        <UserImageComponent v-model.image="user.profilePictureId"
+        :isActive="user.active"
+        
+        />
         <form  @submit.prevent="submitForm">
             <table>
+                <tr>
+                    <th>Status: </th><td><p v-if="user.active"><span class="greenDot"></span> active</p>
+                        <p v-else><span class="orangeDot"></span> deactivated</p>
+                    
+                    </td>
+                </tr>
+
+
                 <tr>
                     <th>First Name: </th><td><input v-model="user.firstName"></td>
                 </tr>
@@ -28,8 +39,17 @@
                 
             </table>
             <button type="submit" @click="updateUser()">Update</button>
-            <button type="submit">Delete</button>
-            <button v-if="isAdmin" type="submit">Deactivate</button>
+            <button type="submit" @click="deleteUser()">Delete</button>
+            <button v-if="isAdmin && user.active===true" type="submit"
+                @click="toggleActive(user.id)"
+            >
+                Deactivate
+            </button>
+            <button v-else-if="isAdmin" type="submit"
+                @click="toggleActive(user.id)"
+            >
+                Activate
+            </button>
         </form>
     </div>
     
@@ -65,7 +85,8 @@ const user = ref({
     country: null,
     password: null,
     gender: null,
-    profilePictureId: null
+    profilePictureId: null,
+    active: null
 });
 
 
@@ -88,6 +109,7 @@ const getUserInfo = async (id) => {
         user.value.email = userInfo.email;
         user.value.role = userInfo.role;
         user.value.profilePictureId = userInfo.profilePictureId;
+        user.value.active = userInfo.active;
 
     }catch (e) {
         console.log(e)
@@ -100,9 +122,29 @@ const getUserInfo = async (id) => {
 
 const updateUser = async () => {
     await userService.patchUser(route.params.userId, user.value);
-    await getUserInfo(route.params.userId);
+    await getUserInfo(route.params.userId)
 
+}
 
+const deleteUser = async () => {
+    await userService.deleteUser(route.params.userId);
+    if (userData.userId === route.params.userId){
+        userData.logout();
+        router.push({path: "/"})
+    } else {
+        router.push({path: "/profiles"})
+    }
+}
+
+const toggleActive = async () => {
+    await userService.toggleActive(route.params.userId);
+    if (userData.userId === route.params.userId){
+        userData.logout();
+        router.push({path: "/"})
+    }
+    else {
+        await getUserInfo(route.params.userId)
+    }
 }
 
 
@@ -125,6 +167,7 @@ const updateUser = async () => {
 import CountrySelectComponent from "../forms/registration/CountrySelectComponent.vue";
 import RoleSelectComponent from "../forms/RoleSelectComponent.vue";
 import UserImageComponent from "./UserImageComponent.vue";
+import router from "@/router";
 export default {
     name: "UserPatchComponent",
     components: {CountrySelectComponent,

@@ -47,7 +47,6 @@ export class UserService {
         userStore.setProfilePictureId(jsonResponse.profilePictureId);
     }
 
-
     async register(user, image){
 
         const response = await this.$backend.post("/user/register", user, {
@@ -190,7 +189,6 @@ export class UserService {
     }
 
     async updateRole(userId, role){
-        console.log(role)
         try{
             const response = await this.$backend.post("/user/" + userId + "/role", role, {
                 headers: {"Authorization": this.$userStore.getToken(),
@@ -205,6 +203,20 @@ export class UserService {
             this.$errorStore.setError(e)
 
         }
+    }
+
+    async toggleActive(userId){
+        try{
+            const response = await this.$backend.post("/user/" + userId + "/activeState", null, {
+                headers: {"Authorization": this.$userStore.getToken(),},
+            })
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error(`Could not change active status. Status Code ${response.status}`);
+            }
+        }catch (e){
+            this.$errorStore.setError(e)
+        }
+
     }
 
     async getUsers(){
@@ -226,6 +238,21 @@ export class UserService {
 
 
 
+
+
+    }
+
+    async deleteUser(userId){
+        try{
+            const response = await this.$backend.delete("/user/" + userId, {
+                headers: {"Authorization": this.$userStore.getToken(),},
+            })
+            if (response.status > 299) {
+                throw new Error(`Could not delete user. Status Code ${response.status}`);
+            }
+        }catch (e){
+            this.$errorStore.setError(e)
+        }
 
 
     }

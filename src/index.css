@@ -88,12 +88,26 @@ nav a.router-link-exact-active {
     border-radius: 9999px;
     margin-left: 2rem;
     margin-right: 2rem;
+}
 
 
+.fullPageTable {
+    width: 95%;
+}
 
-
-
-
+.orangeDot {
+    height: 25px;
+    width: 25px;
+    background-color: orangered;
+    border-radius: 50%;
+    display: inline-block;
+}
+.greenDot {
+    height: 25px;
+    width: 25px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 
