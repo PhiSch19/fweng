@@ -4,7 +4,22 @@
         :isActive="user.active"
         
         />
-        <form  @submit.prevent="submitForm">
+        <form  @submit.prevent="submitForm"
+        >
+            <div class="flex md:flex md:flex-grow flex-row justify-start space-x-1 mb-2">
+                <button type="submit" @click="deleteUser()" >Delete</button>
+                <button v-if="isAdmin && user.active===true" type="submit"
+                    @click="toggleActive(user.id)"
+
+                >
+                    Deactivate
+                </button>
+                <button v-else-if="isAdmin" type="submit"
+                    @click="toggleActive(user.id)"
+                >
+                    Activate
+                </button>
+            </div>
             <table>
                 <tr>
                     <th>Status: </th><td><p v-if="user.active"><span class="greenDot"></span> active</p>
@@ -27,6 +42,9 @@
                     <th>Email: </th><td><input v-model="user.email"></td>
                 </tr>
                 <tr>
+                    <th>Gender: </th><td><input v-model="user.gender"></td>
+                </tr>
+                <tr>
                     <th>Country :</th><td><CountrySelectComponent v-model="user.country"/></td>
                 </tr>
                 <tr v-if="isAdmin">
@@ -38,18 +56,11 @@
                 </tr>
                 
             </table>
-            <button type="submit" @click="updateUser()">Update</button>
-            <button type="submit" @click="deleteUser()">Delete</button>
-            <button v-if="isAdmin && user.active===true" type="submit"
-                @click="toggleActive(user.id)"
-            >
-                Deactivate
-            </button>
-            <button v-else-if="isAdmin" type="submit"
-                @click="toggleActive(user.id)"
-            >
-                Activate
-            </button>
+            <div class="flex md:flex md:flex-grow flex-row justify-start space-x-1 mb-2">
+                <button type="submit" @click="updateUser()">Update</button>
+            </div>
+            
+            
         </form>
     </div>
     
@@ -108,6 +119,7 @@ const getUserInfo = async (id) => {
         user.value.country = userInfo.country;
         user.value.email = userInfo.email;
         user.value.role = userInfo.role;
+        user.value.gender = userInfo.salutation;
         user.value.profilePictureId = userInfo.profilePictureId;
         user.value.active = userInfo.active;
 

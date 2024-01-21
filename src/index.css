@@ -3,6 +3,13 @@
 @tailwind utilities;
 @tailwind variants;
 
+body {
+    height: 100%;
+}
+#app {
+    height: 100%;
+}
+
 .btn {
     @apply bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow;
 }
@@ -31,6 +38,7 @@ nav a.router-link-exact-active {
     h1 {
         @apply text-2xl;
         @apply bg-blue-200;
+        @apply mb-3
     }
 
     h2 {
@@ -83,11 +91,11 @@ nav a.router-link-exact-active {
 
 
 .profilePictureBig {
-    max-height: 25%;
+    max-height: 20rem;
     width: auto;
-    border-radius: 9999px;
+    border-radius: 50%;
     margin-left: 2rem;
-    margin-right: 2rem;
+    margin-right: 10rem;
 }
 
 
