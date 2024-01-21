@@ -10,44 +10,54 @@
                     <div class="w-full px-3 mb-6 md:mb-0">
                         <input :class="inputStyleUnchecked"
                             id="profilePicture" type="file"
+                            @change="e=> onImageSelected(e)"
                         />
 
                     </div>
-                    <button type="submit" @click="updateProfilePicture()">submit</button>
+                    <button type="submit" @click="updateProfilePicture(ressourceId, image)">submit</button>
                 </div>
             </form>
     </div>
-
-    
 
 
 </template>
 
 <script setup>
-import { defineModel } from 'vue';
+import { ref, defineModel } from 'vue';
+import { useRoute } from 'vue-router';
+import { useUserStore } from "@/store/userStore";
+import {UserService} from "@/services/UserService";
+const route = useRoute();
 
-const show = defineModel()
-//import { useUserStore } from "@/store/userStore";
-//import {UserService} from "@/services/UserService";
 
-//const apiRegisterUrl = process.env.VUE_APP_API_REGISTER;
-//const apiAuthenticateUrl = process.env.VUE_APP_API_AUTH;
-//const apiUserUrl = process.env.VUE_APP_API_USER;
-//const userData = useUserStore();
-//const userService = new UserService(userData);
+const ressourceId = ref(route.params.id);
+const show = defineModel("display");
+const imageId = defineModel("imageId");
+const image = ref(null);
+
+
+const userData = useUserStore();
+const userService = new UserService(userData);
+
+const onImageSelected = (e) => {
+  image.value = e.target.files[0]
+}
+
+const updateProfilePicture = async (userId, img) => {
+    if (img !== null && img !== ""){
+        await userService.updateProfilePicture(userId, img);
+        const data = await userService.getById(userId);
+        imageId.value = data.profilePictureId;
+    }
+    await dropSelf();
+    
+}
 
 
 const dropSelf = async() => {
-    //console.log(`show.value: ${show.value}`)
     show.value = false;
 }
 
-/*
-const  dropSelf = async () => {
-        //refreshForm();
-        showComp.value = false;
-    }
-*/
 
 </script>
 

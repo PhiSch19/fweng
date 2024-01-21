@@ -206,12 +206,10 @@ const onProfilePictureSelected = (e) => {
 }
 
 
-
 const  dropSelf = async () => {
         //refreshForm();
         showComp.value = false;
     }
-
 
 const register = async () => {
     

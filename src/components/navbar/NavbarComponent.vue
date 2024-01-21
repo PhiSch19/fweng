@@ -6,7 +6,7 @@
         <img :src="profile_picture.img"  
               :alt="profile_picture.alt"
               class="w-10 h-10 rounded-full mx-8" 
-        @click="userBtnClickHandler()"
+
         
         />
       </router-link>
@@ -100,15 +100,6 @@ const loginBtnClickHandler = () => {
   }
 }
 
-
-const userBtnClickHandler = () => {
-  console.log("clicked")
-  if (showUserModel.value) {
-    showUserModel.value = false;
-  } else {
-    showUserModel.value = true;
-  }
-}
 
 const logout = () => {
   userData.logout();

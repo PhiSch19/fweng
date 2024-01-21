@@ -13,8 +13,8 @@
      </form>
      
      <UpdateProfilePictureComponent v-if="displayModal===true"
-     v-model="displayModal"
-     
+     v-model:display="displayModal"
+     v-model:imageId ="profilePictureId"
      />
 
 
@@ -29,8 +29,6 @@ import { UserService } from '@/services/UserService';
 
 const displayModal = ref(false);
 const userService = new UserService(null, null);
-
-
 const profilePictureId = defineModel();
 
 const profilePicture = computed(() => {
@@ -39,7 +37,6 @@ const profilePicture = computed(() => {
 
 const toggleModal = () => {
     displayModal.value = !displayModal.value;
-
 
 
 }

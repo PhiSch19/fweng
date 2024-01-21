@@ -73,7 +73,7 @@
 <script setup>
 
 import {computed, onMounted, ref} from "vue";
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 import {useErrorStore} from "@/store/errorStore";
 import { useUserStore } from "@/store/userStore";
 import { UserService } from "@/services/UserService";
@@ -81,10 +81,10 @@ import { sufficientRole } from "@/composables/roles";
 
 const route = useRoute();
 const isAdmin = computed(() => {return sufficientRole("ROLE_ADMIN", userData.role)});
-const isThatUser = computed(() => {if(route.params.userId ===userData.userId)return true; return false;})
+const isThatUser = computed(() => {if(route.params.id===userData.userId)return true; return false;})
 const errorStore = useErrorStore();
 const userData = useUserStore();
-//const countryData = useCountryStore();
+
 const userService = new UserService(userData, errorStore);
 
 const user = ref({
@@ -103,7 +103,7 @@ const user = ref({
 
 // data fetch
 onMounted(async () => {
-    await getUserInfo(route.params.userId);
+    await getUserInfo(route.params.id);
 
  })
 
@@ -112,7 +112,6 @@ onMounted(async () => {
 const getUserInfo = async (id) => {
     try{
         const userInfo = await userService.getById(id);
-        console.log(userInfo);
         user.value.firstName = userInfo.firstname;
         user.value.lastName = userInfo.lastname;
         user.value.userName = userInfo.username;
@@ -133,14 +132,14 @@ const getUserInfo = async (id) => {
 }
 
 const updateUser = async () => {
-    await userService.patchUser(route.params.userId, user.value);
-    await getUserInfo(route.params.userId)
+    await userService.patchUser(route.params.id, user.value);
+    await getUserInfo(route.params.id)
 
 }
 
 const deleteUser = async () => {
-    await userService.deleteUser(route.params.userId);
-    if (userData.userId === route.params.userId){
+    await userService.deleteUser(route.params.id);
+    if (userData.userId === route.params.id){
         userData.logout();
         router.push({path: "/"})
     } else {
@@ -149,13 +148,13 @@ const deleteUser = async () => {
 }
 
 const toggleActive = async () => {
-    await userService.toggleActive(route.params.userId);
-    if (userData.userId === route.params.userId){
+    await userService.toggleActive(route.params.id);
+    if (userData.userId === route.params.id){
         userData.logout();
         router.push({path: "/"})
     }
     else {
-        await getUserInfo(route.params.userId)
+        await getUserInfo(route.params.id)
     }
 }
 
