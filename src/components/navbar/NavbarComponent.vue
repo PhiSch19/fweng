@@ -23,7 +23,7 @@
       <router-link to="/profiles" v-if="adminRights" class="mx-4">Profiles</router-link>
     </nav>
     <div class="pt-2">
-      <button class="btn-blue" v-if="!userRights" @click="registerBtnClickHandler()">register</button>
+      <button class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4" v-if="!userRights" @click="registerBtnClickHandler()">register</button>
       &nbsp;
 
       <button @click="logout()" v-if="userRights" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">logout</button>

@@ -29,6 +29,18 @@
 </template>
 
 <script setup>
+import { useHead } from '@vueuse/head';
+
+useHead({
+  title: 'Your Page Title',
+  meta: [
+    { name: 'description', content: 'Your page description' },
+    // Add other meta tags as needed
+  ],
+  htmlAttrs: {
+    lang: 'en', // Set the lang attribute dynamically
+  },
+});
 </script>
 <style>
 body {
