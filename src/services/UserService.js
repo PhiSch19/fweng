@@ -1,8 +1,6 @@
-
 import instance from "@/config/axios_config";
-export class UserService {
 
-    $userStore;
+export class UserService {
 
     constructor(userStore, errorStore) {
         this.$userStore = userStore;
@@ -12,27 +10,18 @@ export class UserService {
 
     async fillStoreFromApi() {
         const userStore = this.$userStore;
-        if(!userStore.userId) {
+        if (!userStore.userId) {
             return;
         }
-        /*
-        const response = await fetch(apiUserUrl + "/" + userStore.userId + "/details", {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-                "Authorization": userStore.getToken(),
-            },
-        })
-        */
 
         const response = await this.$backend.get("/user/" + userStore.userId + "/details", {
-              headers: {
+                headers: {
                     "content-type": "application/json",
                     "Authorization": userStore.getToken(),
-                    },
-                }
-            );
-            console.log(response);
+                },
+            }
+        );
+        console.log(response);
 
 
         if (response.status !== 200) {
@@ -47,28 +36,29 @@ export class UserService {
         userStore.setProfilePictureId(jsonResponse.profilePictureId);
     }
 
-    async register(user, image){
+    async register(user, image) {
 
         const response = await this.$backend.post("/user/register", user, {
             headers: {"content-type": "application/json",},
 
         })
-        
-        
-        
-            if (response.status !== 200) {
-              throw new Error("Could not register this user. Please try again");
+
+
+        if (response.status !== 200) {
+            throw new Error("Could not register this user. Please try again");
         }
         const jsonResponse = response.data;
         await this.authenticate(user);
-        if(image){await this.updateProfilePicture(jsonResponse.id, image);}
+        if (image) {
+            await this.updateProfilePicture(jsonResponse.id, image);
+        }
         await this.fillStoreFromApi(jsonResponse.id);
-        return true;  
+        return true;
 
 
     }
 
-    async authenticate(auth){
+    async authenticate(auth) {
         /*
         const response = await fetch(apiAuthenticateUrl, {
             method: "POST",
@@ -83,16 +73,16 @@ export class UserService {
         if (response.status !== 200) {
             throw new Error("Could not authenticate.");
         }
-          const json_response = response.data;
-          this.$userStore.setToken(json_response);
-          await this.fillStoreFromApi();
+        const json_response = response.data;
+        this.$userStore.setToken(json_response);
+        await this.fillStoreFromApi();
 
     }
 
-    async updateProfilePicture(userId, image){
+    async updateProfilePicture(userId, image) {
         const file = new FormData();
         file.append('file', image);
- 
+
         const response = await this.$backend.post("/user/" + userId + "/profile-picture", file, {
             headers: {"Authorization": this.$userStore.getToken(),},
         })
@@ -103,15 +93,15 @@ export class UserService {
 
     }
 
-    getImageLink(){
+    getImageLink() {
 
         const backend_url = "http://localhost:8081"
         const profile = {}
-        
-        if(this.$userStore.profilePictureId){
+
+        if (this.$userStore.profilePictureId) {
             profile.img = `${backend_url}/file/${this.$userStore.profilePictureId}/download`
             profile.alt = `profile picture of user ${this.$userStore.username}`
-        }else{
+        } else {
             profile.img = require("@/assets/default_cover.jpg");
             profile.alt = `placeholder profile image as user ${this.$userStore.username} did not provide one.`
         }
@@ -119,48 +109,40 @@ export class UserService {
 
     }
 
-    async getById(userId){
+    async getById(userId) {
         const response = await this.$backend.get(`/user/${userId}/details`, {
             headers: {"Authorization": this.$userStore.getToken(),},
         })
 
         if (response.status === 200) {
-            return response.data   
-        }
-
-        else if (response.status === 401 || response.status === 403) {
+            return response.data
+        } else if (response.status === 401 || response.status === 403) {
             throw new Error("You are not authorized to see other users.");
 
-        }
-
-        else {
+        } else {
             throw new Error("Something went wrong");
         }
 
 
-
-
-
-
     }
 
-    getProfileImage(profilePictureId){
+    getProfileImage(profilePictureId) {
 
         const backend_url = "http://localhost:8081"
         const profile = {}
-        
-        if(profilePictureId){
+
+        if (profilePictureId) {
             profile.img = `${backend_url}/file/${profilePictureId}/download`
             profile.alt = `a profile image`
-        }else{
+        } else {
             profile.img = require("@/assets/default_cover.jpg");
             profile.alt = `placeholder profile image as the user did not provide an image`
         }
         return profile
     }
 
-    async patchUser(userId, userObject){
-        const patchBody =  {};
+    async patchUser(userId, userObject) {
+        const patchBody = {};
         // need to map the userBojet to the required keys for the patch body
         userObject.lastName ? patchBody.lastname = userObject.lastName : null;
         userObject.firstName ? patchBody.firstname = userObject.firstName : null;
@@ -169,7 +151,7 @@ export class UserService {
         userObject.country ? patchBody.country = userObject.country : null;
         userObject.role ? patchBody.role = userObject.role : null;
         userObject.password ? patchBody.password = userObject.password : null;
-        try{
+        try {
             const response = await this.$backend.patch("/user/" + userId + "/details", patchBody, {
                 headers: {"Authorization": this.$userStore.getToken(),},
             })
@@ -177,50 +159,51 @@ export class UserService {
                 throw new Error("Could not upload profile picture.");
             }
             console.log(response.data)
-            if ( patchBody.role ){
+            if (patchBody.role) {
                 await this.updateRole(userId, patchBody.role);
             }
 
 
-        }catch (e){
+        } catch (e) {
             this.$errorStore.setError(e)
 
         }
     }
 
-    async updateRole(userId, role){
-        try{
+    async updateRole(userId, role) {
+        try {
             const response = await this.$backend.post("/user/" + userId + "/role", role, {
-                headers: {"Authorization": this.$userStore.getToken(),
-                          "Content-Type": "text/plain"
-            
-                        },
+                headers: {
+                    "Authorization": this.$userStore.getToken(),
+                    "Content-Type": "text/plain"
+
+                },
             })
             if (response.status !== 200 && response.status !== 201) {
                 throw new Error(`Role could not be changed. status ${response.status}`);
             }
-        }catch (e){
+        } catch (e) {
             this.$errorStore.setError(e)
 
         }
     }
 
-    async toggleActive(userId){
-        try{
+    async toggleActive(userId) {
+        try {
             const response = await this.$backend.post("/user/" + userId + "/activeState", null, {
                 headers: {"Authorization": this.$userStore.getToken(),},
             })
             if (response.status !== 200 && response.status !== 201) {
                 throw new Error(`Could not change active status. Status Code ${response.status}`);
             }
-        }catch (e){
+        } catch (e) {
             this.$errorStore.setError(e)
         }
 
     }
 
-    async getUsers(){
-        try{
+    async getUsers() {
+        try {
             const response = await this.$backend.get("/user", {
                 headers: {"Authorization": this.$userStore.getToken(),},
             })
@@ -230,27 +213,24 @@ export class UserService {
 
             return response.data;
 
-        }catch (e){
+        } catch (e) {
             this.$errorStore.setError(e)
             return null;
 
         }
 
 
-
-
-
     }
 
-    async deleteUser(userId){
-        try{
+    async deleteUser(userId) {
+        try {
             const response = await this.$backend.delete("/user/" + userId, {
                 headers: {"Authorization": this.$userStore.getToken(),},
             })
             if (response.status > 299) {
                 throw new Error(`Could not delete user. Status Code ${response.status}`);
             }
-        }catch (e){
+        } catch (e) {
             this.$errorStore.setError(e)
         }
 
@@ -258,7 +238,4 @@ export class UserService {
     }
 
 
-
-
-    
 }
