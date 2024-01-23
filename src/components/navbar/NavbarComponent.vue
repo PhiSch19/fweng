@@ -12,9 +12,7 @@
       </router-link>
 
       <router-link to="/">Home</router-link>
-      
-      <RouterLink to="/rooms" v-if="adminRights" class="mx-4"> Rooms</RouterLink>
-      
+
       <RouterLink to="/movies" class="mx-4"> Movies</RouterLink>
       
       <router-link to="/about" class="mx-4"> About</router-link>

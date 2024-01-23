@@ -4,7 +4,6 @@ import ImprintPage from '../pages/ImprintPage.vue'
 import HelpPage from '../pages/HelpPage.vue'
 import MoviesPage from '../pages/MoviesPage.vue'
 import MoviePage from '../pages/MoviePage.vue'
-import RoomsPage from '../pages/RoomsPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import ProfilesPage from "@/pages/ProfilesPage.vue"
 
@@ -31,13 +30,6 @@ const routes = [
         component: MoviePage
 
     },
-    {   
-        path: "/rooms",
-        name: "rooms",
-        component: RoomsPage
-
-    },
-
     {
         path: '/help',
         name: 'help',

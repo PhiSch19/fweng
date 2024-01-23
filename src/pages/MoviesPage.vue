@@ -37,7 +37,7 @@ const crudEnabled = computed(() =>getMovieCrudPermittion(userData.role));
  const getMovies = async () => {
     const response = await fetch(movieApi);
     if ( response.status !== 200 ){
-        throw new Error("Could not fetch Rooms.");
+        throw new Error("Could not fetch Movies.");
     }
     const base = await response.json();
     base.forEach((element) => {
