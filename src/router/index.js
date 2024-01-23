@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage.vue'
 import ImprintPage from '../pages/ImprintPage.vue'
 import HelpPage from '../pages/HelpPage.vue'
 import MoviesPage from '../pages/MoviesPage.vue'
+import MoviePage from '../pages/MoviePage.vue'
 import RoomsPage from '../pages/RoomsPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import ProfilesPage from "@/pages/ProfilesPage.vue"
@@ -22,6 +23,12 @@ const routes = [
         path: "/movies",
         name: "movies",
         component: MoviesPage
+
+    },
+    {   
+        path: "/movies/:id",
+        name: "movie",
+        component: MoviePage
 
     },
     {   

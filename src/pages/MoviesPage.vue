@@ -9,6 +9,10 @@
       class="w-full"
     >
       <MovieComponent :name="movie.name" :image="movie.img" :duration="movie.durationMinutes" />   
+      <router-link  :to="'/movie/' + movie.id">
+          <button>details</button>
+      </router-link>
+      
     </div>
     
   </template>
