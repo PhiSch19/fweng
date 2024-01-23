@@ -72,7 +72,6 @@ const users = ref([]);
 onMounted(async () => {
 
     const _users = await userService.getUsers();
-    console.log(_users)
     users.value = _users.map(item => {
         return item.details;
     })

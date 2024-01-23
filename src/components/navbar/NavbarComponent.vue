@@ -79,7 +79,6 @@ provide("showUserComponent", showUserModel);
 
 // event handlers
 const registerBtnClickHandler = () => {
-  console.log("Event: plusBtn was clicked")
   if (registerShowState.value) {
     registerShowState.value = false;
   } else {
@@ -89,7 +88,6 @@ const registerBtnClickHandler = () => {
 }
 
 const loginBtnClickHandler = () => {
-  console.log("Event: plusBtn was clicked")
   if (loginShowState.value) {
     loginShowState.value = false;
   } else {

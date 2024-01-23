@@ -127,9 +127,6 @@ const getUserInfo = async (id) => {
     }catch (e) {
         console.log(e)
     }
-    
-
-
 
 }
 

@@ -58,7 +58,6 @@ export class MovieService {
         if (response.status !== 200) {
             throw new Error("Could not upload profile picture.");
         }
-        console.log(response.data)
 
     }
 

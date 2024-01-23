@@ -46,20 +46,17 @@ const password = ref("");
 const passwordSatisfied = ref(true);
 
 async function handleLoginBtnClick() {
-  console.log(`userName: ${userName.value}`)
   const body = {username: userName.value, password: password.value};
   try {
     const token_response = await login(body);
     showComp.value = false;
   } catch (e) {
-    console.log(e);
     await errorHandler(e);
   }
 }
 
 
 const login = async (body) => {
-  console.log(body)
   const response = await fetch(apiAuthenticateUrl, {
     method: "POST",
     headers: {"content-type": "application/json",},

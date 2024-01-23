@@ -22,10 +22,6 @@
                 setSatisfied: Function || null
             })
     
-    
-    console.log(props)
-
-    
     const requirementsMet = computed(() => {return lengthValidator(value.value, props.requiredLength)})
 
     function setValue(e){

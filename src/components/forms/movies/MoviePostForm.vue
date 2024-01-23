@@ -78,11 +78,9 @@
 
     const submitMovie = async () => {
         if ( image.value === "" || duration.value === 0 || description.value === "" || image.value === "" ) {
-            console.log("invalid input")
             return null;
         }
         
-        console.log(image.value);
         const fd = new FormData();
         fd.append('file', image.value);
 
@@ -97,7 +95,6 @@
             body: JSON.stringify(body)
             })
         if (response.status > 201){
-            console.log("could not create movie")
             return null;
         }
         const json_response = await response.json();
@@ -114,12 +111,10 @@
             body: fd
             })
         if ( mresponse.status > 201 ) {
-            console.log(`could not upload image with status: ${mresponse.status}`);
             return null;
         }
         const movie = await mresponse.json()
         movie.img = `${apiUrl}/${movie.id}/cover`;
-        console.log(movie);
         // at this stage everything worked great. I just want to add the newly created movie to the array of movies
         // best option is to rerender movies component
         movies.value.push(movie);

@@ -21,8 +21,6 @@ export class UserService {
                 },
             }
         );
-        console.log(response);
-
 
         if (response.status !== 200) {
             throw new Error("Could not register this user. Please try again");
@@ -89,7 +87,6 @@ export class UserService {
         if (response.status !== 200) {
             throw new Error("Could not upload profile picture.");
         }
-        console.log(response.data)
 
     }
 
@@ -158,7 +155,6 @@ export class UserService {
             if (response.status !== 200) {
                 throw new Error("Could not upload profile picture.");
             }
-            console.log(response.data)
             if (patchBody.role) {
                 await this.updateRole(userId, patchBody.role);
             }

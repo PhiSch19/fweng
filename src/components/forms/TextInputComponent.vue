@@ -33,21 +33,12 @@ const requirementsMet = ref(false);
 const setValue = (e) => {
     value.value = e.target.value;
 
-    if (lengthMet() && emailMet() && isStrongPassword()){
-        console.log("requirements Met!!!")
-        requirementsMet.value = true;
-    }
-    else {
-        requirementsMet.value = false;
-        console.log("requirements not met");
-    }
+    requirementsMet.value = lengthMet() && emailMet() && isStrongPassword();
     
 }
 
 const lengthMet = () => {
     if ( props.requiredLength ){
-        console.log("requiredLength is set")
-        console.log(props.requiredLength)
         if ( props.requiredLength > value.value.length ){
             return false;
         }
