@@ -57,13 +57,6 @@ export class UserService {
     }
 
     async authenticate(auth) {
-        /*
-        const response = await fetch(apiAuthenticateUrl, {
-            method: "POST",
-            headers: {"content-type": "application/json",},
-            body: JSON.stringify(auth)
-          })
-        */
         const response = await this.$backend.post("/user/token", auth, {
             headers: {"content-type": "application/json",},
         })

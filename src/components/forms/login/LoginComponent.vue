@@ -32,7 +32,6 @@
 import {inject, ref} from "vue";
 import { useUserStore } from "@/store/userStore";
 import {UserService} from "@/services/UserService";
-const apiAuthenticateUrl = "http://localhost:8081/user/token";
 
 const userData = useUserStore();
 const userService = new UserService(userData);
@@ -48,28 +47,12 @@ const passwordSatisfied = ref(true);
 async function handleLoginBtnClick() {
   const body = {username: userName.value, password: password.value};
   try {
-    const token_response = await login(body);
+    await userService.authenticate(body);
     showComp.value = false;
   } catch (e) {
     await errorHandler(e);
   }
 }
-
-
-const login = async (body) => {
-  const response = await fetch(apiAuthenticateUrl, {
-    method: "POST",
-    headers: {"content-type": "application/json",},
-    body: JSON.stringify(body)
-  })
-  if (response.status !== 200) {
-    throw new Error("Could not authenticate.");
-  }
-  const json_response = await response.json();
-  userData.setToken(json_response);
-  await userService.fillStoreFromApi();
-}
-
 
 
 </script>
