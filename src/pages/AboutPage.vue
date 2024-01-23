@@ -1,6 +1,6 @@
 <template>
   <NavbarComponent/>
-  <h1>AboutPage</h1>
+  <h1>About us</h1>
   <section>
     <h2>Our Story</h2>
     <p>Cinemagic was founded with a passion for bringing the magic of cinema to audiences worldwide. Our journey
