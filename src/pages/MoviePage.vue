@@ -1,13 +1,8 @@
 <template>
     <NavbarComponent/>
-    <div :key="userId">
-      <div v-if="!authorized" ><UnauthComponent /></div>
-      <div v-else>
+    <div :key="movieId">
         <h1>Movie</h1>
-  
-        <MovieDetailComponent :movie="selectedMovie" v-if="selectedMovie" />
-        
-      </div>
+        <MovieDetailComponent v-model = "movieId"/>
     </div>
 
     
@@ -16,21 +11,16 @@
   <script setup>
   import {ref, computed, provide} from "vue";
   import { useRoute } from 'vue-router'
-  import { useUserStore } from "@/store/userStore";
-  import { sufficientRole } from "@/composables/roles";
-  
+
   const route = useRoute();
-  const userId = computed (() => {return route.params.id});
-  const userData = useUserStore();
-  const authorized = computed(() =>{if (sufficientRole("ROLE_ADMIN", userData.role) || userData.userId === route.params.userId){return true;} return false; })
- 
+  const movieId = computed (() => {return route.params.id});
+
   const showMovieDetailModel = ref(false);
   provide("showMovieDetailComponent", showMovieDetailModel);
    
 </script>
   
 <script>
-  import UnauthComponent from "@/components/error/UnauthComponent.vue";
   import NavbarComponent from "@/components/navbar/NavbarComponent.vue";
   import MovieDetailComponent from "@/components/MovieDetails/MovieDetailComponent.vue";
   
@@ -39,7 +29,6 @@
     name: 'MoviePage',
     components: {
       NavbarComponent,
-      UnauthComponent,
       MovieDetailComponent,
     }
   }

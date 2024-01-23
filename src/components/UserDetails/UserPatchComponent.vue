@@ -7,15 +7,16 @@
         <form  @submit.prevent="submitForm"
         >
             <div class="flex md:flex md:flex-grow flex-row justify-start space-x-1 mb-2">
-                <button type="submit" @click="deleteUser()" >Delete</button>
+                <button type="submit" @click="deleteUser()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4">Delete</button>
                 <button v-if="isAdmin && user.active===true" type="submit"
                     @click="toggleActive(user.id)"
-
+class="bg-red-300 hover:bg-red-400 text-white font-bold py-2 px-4"
                 >
                     Deactivate
                 </button>
                 <button v-else-if="isAdmin" type="submit"
                     @click="toggleActive(user.id)"
+                        class="bg-green-300 hover:bg-green-400 text-white font-bold py-2 px-4"
                 >
                     Activate
                 </button>
@@ -57,7 +58,8 @@
                 
             </table>
             <div class="flex md:flex md:flex-grow flex-row justify-start space-x-1 mb-2">
-                <button type="submit" @click="updateUser()">Update</button>
+                <button type="submit" @click="updateUser()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4"
+                >Update</button>
             </div>
             
             

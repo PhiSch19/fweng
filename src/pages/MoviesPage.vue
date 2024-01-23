@@ -1,16 +1,16 @@
 <template>
     <NavbarComponent/>
-    <button @click="setPostModalDisplay()" v-if="crudEnabled">addMovie</button>
     <MoviePostForm v-if="postModalDisplay" :display="postModalDisplay" />
 
     <h1>Movies</h1>
-    <div v-if="loading" class="loading">Loading...</div>
+  <button @click="setPostModalDisplay()" v-if="crudEnabled" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4">add Movie</button>
+
+  <div v-if="loading" class="loading">Loading...</div>
     <div v-for="(movie, index) in movies" title="userData.role" v-bind:key="index"
       class="w-full"
     >
-      <MovieComponent :name="movie.name" :image="movie.img" :duration="movie.durationMinutes" />   
       <router-link  :to="'/movie/' + movie.id">
-          <button>details</button>
+        <MovieComponent :name="movie.name" :image="movie.img" :duration="movie.durationMinutes" class="m-2"/>
       </router-link>
       
     </div>
@@ -39,13 +39,11 @@ const crudEnabled = computed(() =>getMovieCrudPermittion(userData.role));
     if ( response.status !== 200 ){
         throw new Error("Could not fetch Rooms.");
     }
-    //todo
     const base = await response.json();
     base.forEach((element) => {
       element.img = `${movieApi}/${element.id}/cover`;
     });
 
-    //movies.value = await response.json();
     movies.value = base;
     loading.value = false;
 
