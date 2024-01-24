@@ -4,7 +4,7 @@
     </div>
     <div>
         <form  @submit.prevent="submitForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 modal">
-                <h1>Update Profile Picture</h1>
+                <h1>Update Movie Cover</h1>
                 <div class="flex flex-wrap -mx-3 m-6">
                  
                     <div class="w-full px-3 mb-6 md:mb-0">

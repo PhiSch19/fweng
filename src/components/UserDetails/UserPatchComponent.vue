@@ -53,7 +53,7 @@ class="bg-red-300 hover:bg-red-400 text-white font-bold py-2 px-4"
                 </tr>
                 
                 <tr v-if="isThatUser">
-                    <th>Password: </th><td><input placeholder="change password"></td>
+                    <th>Password: </th><td><input v-model="user.password" placeholder="change password" type="password" /></td>
                 </tr>
                 
             </table>

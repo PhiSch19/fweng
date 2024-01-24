@@ -41,7 +41,7 @@ const crudEnabled = computed(() =>getMovieCrudPermittion(userData.role));
     }
     const base = await response.json();
     base.forEach((element) => {
-      element.img = `${movieApi}/${element.id}/cover`;
+      element.img = `${movieApi}/${element.id}/cover?x=${new Date()}`;
     });
 
     movies.value = base;

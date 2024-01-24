@@ -60,7 +60,7 @@ const showUpdateComponent = ref(false);
   const cover = computed(() => {
     if(movie?.value?.coverId) {
       return {
-        img: 'http://localhost:8081/movie/' + movieId.value + "/cover",
+        img: 'http://localhost:8081/movie/' + movieId.value + "/cover" + "?x=" + new Date(),
         alt: 'Image for the movie ' + movie.value.name + " provided"
       }
     } else {

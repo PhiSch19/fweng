@@ -1,5 +1,5 @@
 import instance from "@/config/axios_config";
-
+import { passwordValidator } from "@/composables/validators";
 export class UserService {
 
     constructor(userStore, errorStore) {
@@ -141,6 +141,12 @@ export class UserService {
         userObject.country ? patchBody.country = userObject.country : null;
         userObject.role ? patchBody.role = userObject.role : null;
         userObject.password ? patchBody.password = userObject.password : null;
+
+        if (userObject.password && userObject.password.length !== 12 ){
+            await this.updatePassword(userId, userObject.password);
+
+        }
+
         try {
             const response = await this.$backend.patch("/user/" + userId + "/details", patchBody, {
                 headers: {"Authorization": this.$userStore.getToken(),},
@@ -170,6 +176,30 @@ export class UserService {
             })
             if (response.status !== 200 && response.status !== 201) {
                 throw new Error(`Role could not be changed. status ${response.status}`);
+            }
+        } catch (e) {
+            this.$errorStore.setError(e)
+
+        }
+    }
+
+
+    async updatePassword(userId, password) {
+        
+        if(!passwordValidator(password)){
+            this.$errorStore.setError("invalid password");
+        }
+        
+        try {
+            const response = await this.$backend.put("/user/" + userId + "/password", password, {
+                headers: {
+                    "Authorization": this.$userStore.getToken(),
+                    "Content-Type": "text/plain"
+
+                },
+            })
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error(`Password could not be changed. status ${response.status}`);
             }
         } catch (e) {
             this.$errorStore.setError(e)
